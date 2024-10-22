@@ -15,7 +15,7 @@ const educationData = [
     awards: ["2024 Khoury College of Computer Science Co-Op Award"],
     details: [
       "During my time at Northeastern, I built a strong foundation in computer science through a combination of coursework and hands-on experience.",
-      "Courses included Algorithms and Data Structures, Software Development, Networks and Distributed Systems, Theory of Computation, Computer Systems,Database Design, Web Development, and Mobile Development.",
+      "Courses included Algorithms and Data Structures, Software Development, Networks and Distributed Systems, Theory of Computation, Computer Systems,Database Design, Web Development, Mobile Development and more!",
       "I was awarded the 2024 Khoury College of Computer Science Co-Op Award in recognition of my achievements during my two co-ops.",
     ],
     image: "/images/northeastern-ring.png"
@@ -71,7 +71,7 @@ function Education() {
               ))}
             </List>
             {edu.awards && edu.awards.length > 0 && (
-              <Box sx={{ mt: 2 }}>
+              <Box sx={{ mt: 1 }}>
                 <Typography level="body-sm" fontWeight="bold">Awards:</Typography>
                 <List>
                   {edu.awards.map((award, awardIndex) => (

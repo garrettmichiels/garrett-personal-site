@@ -7,6 +7,7 @@ import ListItem from '@mui/joy/ListItem';
 import ListItemContent from '@mui/joy/ListItemContent';
 import Box from '@mui/joy/Box';
 import Chip from '@mui/joy/Chip';
+import theme from './theme';
 
 const experiences = [
   {
@@ -37,14 +38,12 @@ const experiences = [
     skills: ["Kubernetes", "Docker", "Python", "Bash", "SQL", "GitLab CICD", "GKE", "GCP"]
   }
 ];
-
 function Experience() {
   return (
     <Box sx={{ maxWidth: '800px', margin: '0 auto', paddingBottom: 0, position: 'relative' }}>
       <Typography level="h2" sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
         Experience
       </Typography>
-      
       {experiences.map((exp, index) => (
         <Box key={index} sx={{ display: 'flex', mb: 4, position: 'relative' }}>
           <Card 
@@ -58,36 +57,36 @@ function Experience() {
               zIndex: 0,
               bgcolor: 'background.body',
             }}
-            variant="plain"
-          >
-            <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2, justifyContent: 'space-between' }}>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <AspectRatio ratio="1" sx={{ width: 80, mr: 2, borderRadius: '50%', overflow: 'hidden' }}>
-                  <img src={exp.logo} alt={`${exp.company} logo`} />
-                </AspectRatio>
-                <Box>
-                  <Typography level="h3">{exp.title}</Typography>
-                  <Typography level="body-md">{exp.company}</Typography>
-                  <Typography level="body-sm">{exp.location}</Typography>
+            variant="plain">
+            <Box sx={{ display: 'flex'}}>
+              <AspectRatio ratio="1" sx={{ width: 80, flexShrink: 0, mr: 2, borderRadius: '50%', overflow: 'hidden' }}>
+                <img src={exp.logo} alt={`${exp.company} logo`} />
+              </AspectRatio>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <Box sx={{ minWidth: 0 }}>
+                    <Typography level="h3" sx={{ mb: 0.5 }}>{exp.title}</Typography>
+                    <Typography level="body-md">{exp.company}</Typography>
+                    <Typography level="body-sm">{exp.location}</Typography>
+                  </Box>
+                  <Typography level="body-md" sx={{ flexShrink: 0, ml: 2 }}>{exp.date}</Typography>
                 </Box>
               </Box>
-              <Typography level="body-md" sx={{ textAlign: 'right' }}>{exp.date}</Typography>
             </Box>
-            <List sx={{ '--List-gap': '0px' }}>
+            <List sx={{ '--List-gap': '0px', pl: '96px'}}>
               {exp.details.map((detail, detailIndex) => (
-                <ListItem key={detailIndex} sx={{ py: 0.5 }}>
+            <ListItem key={detailIndex} sx={{ py: 0.5, pl: 0 }}>
                   <ListItemContent>{detail}</ListItemContent>
                 </ListItem>
               ))}
             </List>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 0, ml: 1}}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, pl: '96px' }}>
               {exp.skills.map((skill, skillIndex) => (
                 <Chip
                   key={skillIndex}
                   size="md"
                   variant="soft"
-                  color="primary"
-                >
+                  color="primary">
                   {skill}
                 </Chip>
               ))}

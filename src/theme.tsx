@@ -5,7 +5,7 @@ const theme = extendTheme({
     light: {
       palette: {
         background: {
-          body: '#f0f0f0',
+          body: '#F7F8F9',
           surface: '#ffffff',
         },
         text: {
@@ -20,7 +20,7 @@ const theme = extendTheme({
     dark: {
       palette: {
         background: {
-          body: '#121212',
+          body: '#161A1D',
           surface: '#1e1e1e',
         },
         text: {
