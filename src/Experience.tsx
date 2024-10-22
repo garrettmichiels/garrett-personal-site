@@ -67,11 +67,11 @@ function Experience() {
                 </AspectRatio>
                 <Box>
                   <Typography level="h3">{exp.title}</Typography>
-                  <Typography level="body-sm">{exp.company}</Typography>
+                  <Typography level="body-md">{exp.company}</Typography>
                   <Typography level="body-sm">{exp.location}</Typography>
                 </Box>
               </Box>
-              <Typography level="body-sm" sx={{ textAlign: 'right' }}>{exp.date}</Typography>
+              <Typography level="body-md" sx={{ textAlign: 'right' }}>{exp.date}</Typography>
             </Box>
             <List sx={{ '--List-gap': '0px' }}>
               {exp.details.map((detail, detailIndex) => (
