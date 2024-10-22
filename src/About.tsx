@@ -10,10 +10,8 @@ function About() {
                 About
             </Typography>
             <Typography sx={{ mb: 2 }}>
-                    I'm a passionate software engineer with a keen interest in building scalable and efficient solutions. 
-                    With a strong foundation in computer science and hands-on experience in various technologies, 
-                    I strive to create impactful software that solves real-world problems.
-                </Typography>
+            I am a passionate software engineer with a strong desire to build impactful, user-centered solutions that improve everyday life. With an entrepreneurial mindset and a love for innovation, I thrive on exploring new ideas and turning them into practical, scalable technology. I’m constantly seeking opportunities to grow, both technically and creatively, and I’m excited to contribute to teams that value problem-solving, collaboration, and the potential to make a real-world impact.
+            </Typography>
         </Box>
     );
 }

@@ -13,12 +13,13 @@ const educationData = [
     institution: "Northeastern University | Khoury College of Computer Science",
     year: "2020 - 2024",
     details: [
+      "During my time at Northeastern, I built a strong foundation in computer science through a combination of coursework and hands-on experience.",
+      "Courses included Algorithms and Data Structures, Software Development, Networks and Distributed Systems, Theory of Computation, Computer Systems,Database Design, Web Development, and Mobile Development.",
+      "I was awarded the 2024 Khoury College of Computer Science Co-Op Award in recognition of my achievements during my two co-ops.",
       "Award: 2024 Khoury College of Computer Science Co-Op Award",
-    //   "Relevant coursework: Data Structures, Algorithms, Database Systems, Web Development",
     ],
     image: "/images/northeastern-ring.png"
   },
-  // Add more education entries if needed
 ];
 
 function Education() {

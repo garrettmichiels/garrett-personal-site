@@ -18,11 +18,11 @@ import Experience from './Experience';
 import Education from './Education';
 import Projects from './Projects';
 import theme from './theme';
+import InfoButton from './InfoButton';
 
 
 function BottomMenu() {
   const { mode, setMode } = useColorScheme();
-
   return (
     <Box
       sx={{
@@ -129,6 +129,7 @@ function App() {
         </Box>
         <BottomMenu />
       </Box>
+      <InfoButton />
     </CssVarsProvider>
   );
 }
