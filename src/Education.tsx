@@ -40,8 +40,9 @@ function Education() {
             alignItems: { xs: 'center', sm: 'flex-start' },
             gap: 2 
           }}>
-             <AspectRatio ratio="1" sx={{
+             <AspectRatio  variant="plain" ratio="1" sx={{
                 bgcolor: 'transparent !important', // Override the default background
+                backgroundColor: 'transparent !important', // Override the default background
                 '--AspectRatio-radius': '0px', // Remove border radius if any
                 objectFit: 'contain', width: { xs: '100%', sm: 150 }, flexShrink: 0 }}>
              <img

@@ -124,7 +124,7 @@ function App() {
             <About />
             <Experience />
             <Education />
-            <Projects />
+            {/* <Projects /> */}
           </Box>
         </Box>
         <BottomMenu />
