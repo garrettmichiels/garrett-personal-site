@@ -41,7 +41,7 @@ function Education() {
             alignItems: { xs: 'center', sm: 'flex-start' },
             gap: 2 
           }}>
-          <AspectRatio ratio="1" sx={{
+          <AspectRatio  variant="plain"ratio="1" sx={{
             bgcolor: 'transparent !important',
             backgroundColor: 'transparent !important',
             '--AspectRatio-radius': '0px',
