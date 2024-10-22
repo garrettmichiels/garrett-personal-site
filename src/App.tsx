@@ -5,6 +5,8 @@ import './global.css';
 import Box from '@mui/joy/Box';
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import IconButton from '@mui/joy/IconButton';
+import DescriptionIcon from '@mui/icons-material/Description';
+
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -32,6 +34,20 @@ function BottomMenu() {
         zIndex: 1000,
       }}
     >
+    <IconButton
+      variant="solid"
+      color="primary"
+      component="a"
+      href="/resume.pdf"  // Update this path to your actual resume PDF
+      target="_blank"
+      rel="noopener noreferrer"
+      size="md"
+      sx={{
+        bgcolor: '#4CAF50',
+        '&:hover': { bgcolor: '#45a049' },
+      }}
+    ><DescriptionIcon />
+    </IconButton>
     <IconButton
         variant="solid"
         color="primary"
