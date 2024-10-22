@@ -4,54 +4,34 @@ const theme = extendTheme({
   colorSchemes: {
     light: {
       palette: {
-        primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
+        background: {
+          body: '#f0f0f0',
+          surface: '#ffffff',
         },
-        // You can add more color scales here (secondary, neutral, danger, etc.)
+        text: {
+          primary: '#000000',
+          secondary: '#555555',
+        },
+        primary: {
+          500: '#1976d2',
+        },
       },
     },
     dark: {
       palette: {
-        primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
+        background: {
+          body: '#121212',
+          surface: '#1e1e1e',
         },
-        // Dark mode colors can be different if you want
+        text: {
+          primary: '#ffffff',
+          secondary: '#b0b0b0',
+        },
+        primary: {
+          500: '#90caf9',
+        },
       },
     },
-  },
-  fontFamily: {
-    body: '"Roboto", sans-serif',
-    display: '"Roboto", sans-serif',
-  },
-  components: {
-    JoyButton: {
-      styleOverrides: {
-        root: ({ ownerState }) => ({
-          fontWeight: 600,
-          borderRadius: '8px',
-          // Add more custom styles here
-        }),
-      },
-    },
-    // You can customize other components here
   },
 });
 

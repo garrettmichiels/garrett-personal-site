@@ -38,7 +38,7 @@ function BottomMenu() {
       variant="solid"
       color="primary"
       component="a"
-      href="/resume.pdf"  // Update this path to your actual resume PDF
+      href="/resume.pdf"
       target="_blank"
       rel="noopener noreferrer"
       size="md"
