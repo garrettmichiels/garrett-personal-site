@@ -11,6 +11,17 @@ import theme from './theme';
 
 const experiences = [
   {
+    title: "Software Engineer L1",
+    company: "Wayfair",
+    date: "November 2024 - Present",
+    location: "Boston, MA",
+    logo: "../images/wayfair.jpg",
+    details: [
+      "I am excited to start my first full time role at Wayfair! I look forward to learning and growing in this role. More updates to come soon!"
+    ],
+    skills: ["GraphQL", "Spring Boot", "Spring JPA", "Kibana", "Postgres", "GCP"]
+  },
+  {
     title: "Software Engineer Co-Op/Intern",
     company: "BlackBerry",
     date: "September 2023 - December 2023",
