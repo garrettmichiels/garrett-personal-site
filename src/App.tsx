@@ -37,8 +37,9 @@ function BottomMenu() {
     <IconButton
       variant="solid"
       color="primary"
+      title="Resume"
       component="a"
-      href="/resume.pdf"
+      href="/Garrett-Michiels-resume.pdf"
       target="_blank"
       rel="noopener noreferrer"
       size="md"
@@ -51,6 +52,7 @@ function BottomMenu() {
     <IconButton
         variant="solid"
         color="primary"
+        title="LinkedIn"
         component="a"
         href="https://www.linkedin.com/in/garrett-michiels/"
         target="_blank"
@@ -67,6 +69,7 @@ function BottomMenu() {
         variant="solid"
         color="primary"
         component="a"
+        title="GitHub"
         href="https://github.com/garrettmichiels"
         target="_blank"
         rel="noopener noreferrer"
@@ -83,6 +86,7 @@ function BottomMenu() {
         color={mode === 'light' ? 'warning' : 'primary'}
         onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}
         size="md"
+        title="Theme"
         sx={{
           bgcolor: mode === 'light' ? '#FFA500' : '#1E90FF',
           '&:hover': { bgcolor: mode === 'light' ? '#FF8C00' : '#4169E1' },

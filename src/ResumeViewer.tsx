@@ -14,7 +14,7 @@ const ResumeViewer: React.FC = () => {
   return (
     <Box sx={{ width: '100%', height: '100vh', overflow: 'auto' }}>
       <Document
-        file="/resume.pdf"
+        file="/Garrett-Michiels-resume.pdf"
         onLoadSuccess={onDocumentLoadSuccess}
       >
         {Array.from(new Array(numPages), (el, index) => (

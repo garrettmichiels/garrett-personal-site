@@ -13,7 +13,7 @@ const experiences = [
   {
     title: "Software Engineer Co-Op/Intern",
     company: "BlackBerry",
-    date: "May 2023 - August 2023",
+    date: "September 2023 - December 2023",
     location: "Austin, TX",
     logo: "../images/blackberry.png",
     details: [
@@ -27,7 +27,7 @@ const experiences = [
   {
     title: "DevOps Engineer Co-Op",
     company: "Wellframe",
-    date: "September 2022 - July 2022",
+    date: "January 2022 - July 2022",
     location: "Boston, MA",
     logo: "/../images/wellframe.jpg",
     details: [
