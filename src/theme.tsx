@@ -1,34 +1,38 @@
 import { extendTheme } from '@mui/joy/styles';
 
 const theme = extendTheme({
+  fontFamily: {
+    body: 'Inter, var(--joy-fontFamily-fallback)',
+    display: 'Inter, var(--joy-fontFamily-fallback)',
+  },
   colorSchemes: {
     light: {
       palette: {
         background: {
-          body: '#F7F8F9',
-          surface: '#ffffff',
+          body: '#ffffff', // Cleaner white background
+          surface: '#f8f9fa',
         },
         text: {
-          primary: '#000000',
-          secondary: '#555555',
+          primary: '#1a1a1a', // Softer black
+          secondary: '#666666',
         },
         primary: {
-          500: '#1976d2',
+          500: '#2F71D6', // Consistent with CSS var
         },
       },
     },
     dark: {
       palette: {
         background: {
-          body: '#161A1D',
-          surface: '#1e1e1e',
+          body: '#0d1117', // Github-like dark mode
+          surface: '#161b22',
         },
         text: {
-          primary: '#ffffff',
-          secondary: '#b0b0b0',
+          primary: '#c9d1d9',
+          secondary: '#8b949e',
         },
         primary: {
-          500: '#90caf9',
+          500: '#58a6ff',
         },
       },
     },

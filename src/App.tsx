@@ -16,7 +16,11 @@ import Hero from './Hero';
 import About from './About';
 import Experience from './Experience';
 import Education from './Education';
-import Projects from './Projects';
+// import Projects from './Projects';
+import Skills from './Skills';
+import Contact from './Contact';
+import CustomCursor from './CustomCursor';
+
 import theme from './theme';
 import InfoButton from './InfoButton';
 
@@ -34,22 +38,23 @@ function BottomMenu() {
         zIndex: 1000,
       }}
     >
-    <IconButton
-      variant="solid"
-      color="primary"
-      title="Resume"
-      component="a"
-      href="/Garrett-Michiels-resume.pdf"
-      target="_blank"
-      rel="noopener noreferrer"
-      size="md"
-      sx={{
-        bgcolor: '#4CAF50',
-        '&:hover': { bgcolor: '#45a049' },
-      }}
-    ><DescriptionIcon />
-    </IconButton>
-    <IconButton
+      <IconButton
+        variant="solid"
+        color="primary"
+        title="Resume"
+        component="a"
+        href="/Garrett-Michiels-resume.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        size="md"
+        sx={{
+          bgcolor: '#4CAF50',
+          '&:hover': { bgcolor: '#45a049' },
+          cursor: 'none', // Ensure cursor is hidden on specific elements too
+        }}
+      ><DescriptionIcon />
+      </IconButton>
+      <IconButton
         variant="solid"
         color="primary"
         title="LinkedIn"
@@ -61,6 +66,7 @@ function BottomMenu() {
         sx={{
           bgcolor: '#0077B5',
           '&:hover': { bgcolor: '#006699' },
+          cursor: 'none',
         }}
       >
         <LinkedInIcon />
@@ -77,6 +83,7 @@ function BottomMenu() {
         sx={{
           bgcolor: '#333',
           '&:hover': { bgcolor: '#555' },
+          cursor: 'none',
         }}
       >
         <GitHubIcon />
@@ -90,6 +97,7 @@ function BottomMenu() {
         sx={{
           bgcolor: mode === 'light' ? '#FFA500' : '#1E90FF',
           '&:hover': { bgcolor: mode === 'light' ? '#FF8C00' : '#4169E1' },
+          cursor: 'none',
         }}
       >
         {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
@@ -101,6 +109,7 @@ function BottomMenu() {
 function App() {
   return (
     <CssVarsProvider theme={theme} defaultMode="system" disableTransitionOnChange>
+      <CustomCursor />
       <Box
         sx={{
           display: 'flex',
@@ -110,13 +119,17 @@ function App() {
           bgcolor: 'background.body',
           transition: 'none',
           overflow: 'hidden',
+          '@keyframes fadeIn': {
+            from: { opacity: 0, transform: 'translateY(20px)' },
+            to: { opacity: 1, transform: 'translateY(0)' },
+          },
         }}
       >
         <Hero />
-        <Box 
-          sx={{ 
-            flexGrow: 1, 
-            display: 'flex', 
+        <Box
+          sx={{
+            flexGrow: 1,
+            display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             width: '100%',
@@ -126,9 +139,11 @@ function App() {
         >
           <Box sx={{ width: '100%', maxWidth: '800px' }}>
             <About />
+            <Skills />
             <Experience />
-            <Education />
             {/* <Projects /> */}
+            <Education />
+            {/* <Contact /> */}
           </Box>
         </Box>
         <BottomMenu />
