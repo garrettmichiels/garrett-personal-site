@@ -1,0 +1,29 @@
+---
+interface Props {
+  text: string;
+  accent?: string;
+}
+
+const { text, accent } = Astro.props;
+const bg = accent ? `${accent}22` : 'rgba(255,255,255,0.07)';
+const border = accent ? `${accent}44` : 'rgba(255,255,255,0.1)';
+const color = accent || '#888';
+---
+
+<span class="tag" style={`background: ${bg}; border-color: ${border}; color: ${color};`}>
+  {text}
+</span>
+
+<style>
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    border: 1px solid;
+    display: inline-block;
+    white-space: nowrap;
+  }
+</style>

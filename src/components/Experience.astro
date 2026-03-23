@@ -1,0 +1,194 @@
+---
+import SectionLabel from './SectionLabel.astro';
+import Tag from './Tag.astro';
+import CalloutBox from './CalloutBox.astro';
+import CircuitLines from '../art/circuit-lines.astro';
+import data from '../data/experience.json';
+
+const accentMap: Record<string, string> = {
+  'Wayfair': 'var(--accent-sand)',
+  'BlackBerry': 'var(--accent-slate)',
+  'Wellframe': 'var(--accent-sage)',
+};
+---
+
+<section class="section fade-in">
+  <CircuitLines />
+  <SectionLabel text="Experience" accent="var(--accent-sand)" />
+  <h2>Where I've built things</h2>
+
+  <!-- Roles -->
+  <div class="roles">
+    {data.roles.map((role, i) => (
+      <div class={`role fade-in stagger-item`}>
+        <div class="role-header">
+          <img src={role.logo} alt={`${role.company} logo`} class="role-logo" draggable="false" />
+          <div class="role-meta">
+            <h3>{role.title}</h3>
+            <span class="role-company">{role.company}</span>
+            <span class="role-date">{role.date}</span>
+          </div>
+        </div>
+        <ul class="role-details">
+          {role.details.map((detail) => (
+            <li>
+              <span class="bullet-num">{String(role.details.indexOf(detail) + 1).padStart(2, '0')}</span>
+              <span class="bullet-text">{detail}</span>
+            </li>
+          ))}
+        </ul>
+        <div class="role-skills">
+          {role.skills.map((skill) => (
+            <Tag text={skill} accent={accentMap[role.company]} />
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  h2 {
+    margin-top: 6px;
+    margin-bottom: var(--sp-8);
+  }
+
+  /* Impacts */
+  .impacts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-4);
+    margin-bottom: var(--sp-10);
+  }
+
+  .impact-card {
+    background: var(--bg-raised);
+    border: 1px solid var(--border-medium);
+    border-radius: 8px;
+    padding: 18px 22px;
+  }
+
+  .impact-value {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-1);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .impact-label {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-sand);
+    display: block;
+    margin-bottom: var(--sp-2);
+  }
+
+  .impact-desc {
+    font-size: 0.78rem;
+    color: var(--text-3);
+    line-height: 1.5;
+  }
+
+  /* Roles */
+  .roles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-10);
+  }
+
+  .role {
+    opacity: 0;
+  }
+
+  .role-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sp-4);
+    margin-bottom: var(--sp-4);
+  }
+
+  .role-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid var(--border-medium);
+    flex-shrink: 0;
+  }
+
+  .role-meta {
+    flex: 1;
+  }
+
+  .role-meta h3 {
+    margin-bottom: 2px;
+  }
+
+  .role-company {
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    color: var(--text-2);
+    display: block;
+  }
+
+  .role-date {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    color: var(--text-4);
+    text-transform: uppercase;
+  }
+
+  /* Numbered list */
+  .role-details {
+    margin-bottom: var(--sp-4);
+    padding-left: 62px;
+  }
+
+  .role-details li {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-ghost);
+  }
+
+  .role-details li:last-child {
+    border-bottom: none;
+  }
+
+  .bullet-num {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--text-5);
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+
+  .bullet-text {
+    font-size: 0.84rem;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+
+  .role-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-left: 62px;
+  }
+
+  @media (max-width: 768px) {
+    .impacts {
+      grid-template-columns: 1fr;
+    }
+
+    .role-details,
+    .role-skills {
+      padding-left: 0;
+    }
+  }
+</style>

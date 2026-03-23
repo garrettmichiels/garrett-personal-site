@@ -1,0 +1,20 @@
+---
+interface Props {
+  accent?: string;
+}
+
+const { accent = 'var(--accent-sand)' } = Astro.props;
+---
+
+<div class="callout" style={`border-left-color: ${accent};`}>
+  <slot />
+</div>
+
+<style>
+  .callout {
+    background: var(--bg-raised);
+    border-left: 3px solid;
+    padding: 16px 20px;
+    border-radius: 0 6px 6px 0;
+  }
+</style>

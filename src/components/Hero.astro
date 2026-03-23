@@ -1,0 +1,177 @@
+---
+import SectionLabel from './SectionLabel.astro';
+import MarginBlobs from '../art/margin-blobs.astro';
+---
+
+<section class="section hero-section fade-in">
+  <MarginBlobs />
+  <div class="hero-layout">
+    <div class="hero-image-wrap">
+      <!-- Blob clip path definition -->
+      <svg width="0" height="0" aria-hidden="true">
+        <defs>
+          <clipPath id="blob-clip" clipPathUnits="objectBoundingBox">
+            <path d="M0.45,0.02 C0.62,0.0 0.78,0.06 0.89,0.17 C0.98,0.28 1.01,0.44 0.98,0.6 C0.96,0.75 0.88,0.88 0.74,0.96 C0.6,1.02 0.42,1.01 0.28,0.95 C0.14,0.87 0.04,0.74 0.02,0.58 C-0.01,0.42 0.02,0.26 0.1,0.15 C0.19,0.05 0.32,0.03 0.45,0.02Z" />
+          </clipPath>
+        </defs>
+      </svg>
+      <!-- Blob outline behind image -->
+      <svg class="blob-outline" viewBox="0 0 180 200" aria-hidden="true">
+        <path
+          d="M81,4 C112,0 140,12 160,34 C176,56 182,88 176,120 C173,150 158,176 133,192 C108,204 76,202 50,190 C25,174 7,148 4,116 C-2,84 4,52 18,30 C34,10 58,6 81,4Z"
+          fill="none"
+          stroke="var(--accent-sand)"
+          stroke-width="1"
+          opacity="0.2"
+        />
+      </svg>
+      <img
+        src="/images/garrett-portrait.jpeg"
+        alt="Garrett Michiels"
+        class="hero-image"
+        draggable="false"
+      />
+    </div>
+    <div class="hero-content">
+      <SectionLabel text="Software Engineer" accent="var(--accent-sand)" />
+      <h1>Building high-impact<br />systems at scale.</h1>
+      <p class="hero-bio">
+        I build the infrastructure behind conversational AI at <strong>Wayfair</strong> —
+        routing LLM inputs, processing 400k Kafka messages daily, and automating what used
+        to take engineers 20 minutes by hand. Before that, I shipped microservices at
+        BlackBerry and Kubernetes automation at Wellframe. Northeastern CS, class of 2024.
+      </p>
+      <div class="hero-ctas">
+        <a href="/Garrett-Michiels-resume.pdf" target="_blank" rel="noopener noreferrer" class="cta-primary">
+          View Resume
+        </a>
+        <a href="https://www.linkedin.com/in/garrett-michiels/" target="_blank" rel="noopener noreferrer" class="cta-secondary">
+          Connect
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-section {
+    padding-top: var(--sp-20);
+    padding-bottom: var(--sp-16);
+  }
+
+  .hero-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sp-10);
+  }
+
+  .hero-image-wrap {
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .blob-outline {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 188px;
+    height: 208px;
+    pointer-events: none;
+  }
+
+  .hero-image {
+    width: 180px;
+    height: 200px;
+    object-fit: cover;
+    clip-path: url(#blob-clip);
+  }
+
+  .hero-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  h1 {
+    margin-top: 6px;
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  }
+
+  .hero-bio {
+    margin-top: var(--sp-4);
+    max-width: 540px;
+  }
+
+  .hero-bio strong {
+    color: var(--text-1);
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: var(--sp-3);
+    margin-top: var(--sp-6);
+  }
+
+  .cta-primary,
+  .cta-secondary {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+
+  .cta-primary {
+    background: var(--accent-sand);
+    color: var(--bg-base);
+    border: 1px solid var(--accent-sand);
+  }
+
+  .cta-primary:hover {
+    background: var(--accent-sand-deep);
+    border-color: var(--accent-sand-deep);
+  }
+
+  .cta-secondary {
+    background: transparent;
+    color: var(--text-2);
+    border: 1px solid var(--border-strong);
+  }
+
+  .cta-secondary:hover {
+    border-color: var(--accent-sand);
+    color: var(--accent-sand);
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding-top: var(--sp-12);
+    }
+
+    .hero-layout {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: var(--sp-6);
+    }
+
+    .hero-image {
+      width: 140px;
+      height: 155px;
+    }
+
+    .blob-outline {
+      width: 148px;
+      height: 163px;
+    }
+
+    .hero-bio {
+      max-width: none;
+    }
+
+    .hero-ctas {
+      justify-content: center;
+    }
+  }
+</style>

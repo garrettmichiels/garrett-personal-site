@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Hero from '../components/Hero.astro';
+import Experience from '../components/Experience.astro';
+import Education from '../components/Education.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout>
+  <Sidebar />
+  <main>
+    <div id="home"><Hero /></div>
+    <div id="experience"><Experience /></div>
+    <div id="education"><Education /></div>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  main {
+    scroll-behavior: smooth;
+  }
+
+  /* Offset anchors for smooth scroll so they don't hide behind viewport top */
+  [id] {
+    scroll-margin-top: var(--sp-4);
+  }
+</style>

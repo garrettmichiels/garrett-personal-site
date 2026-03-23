@@ -1,0 +1,143 @@
+---
+import SectionLabel from './SectionLabel.astro';
+import Tag from './Tag.astro';
+import CalloutBox from './CalloutBox.astro';
+import RingArcs from '../art/ring-arcs.astro';
+import data from '../data/education.json';
+---
+
+<section class="section fade-in">
+  <RingArcs />
+  <SectionLabel text="Education" accent="var(--accent-sage)" />
+  <h2>{data.institution}</h2>
+
+  <div class="edu-layout">
+    <div class="edu-content">
+      <div class="edu-meta">
+        <span class="edu-degree">{data.degree}</span>
+        <span class="edu-college">{data.college}</span>
+        <span class="edu-date">{data.year} · {data.location}</span>
+      </div>
+
+      {data.awards.map((award) => (
+        <CalloutBox accent="var(--accent-sage)">
+          <span class="award-label">Award</span>
+          <p class="award-text">{award}</p>
+        </CalloutBox>
+      ))}
+
+      <div class="coursework">
+        <span class="coursework-label">Relevant Coursework</span>
+        <div class="coursework-tags">
+          {data.coursework.map((course) => (
+            <Tag text={course} accent="var(--accent-sage)" />
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="edu-image-wrap">
+      <img src={data.image} alt="Northeastern University" class="edu-image" draggable="false" />
+    </div>
+  </div>
+</section>
+
+<style>
+  h2 {
+    margin-top: 6px;
+    margin-bottom: var(--sp-3);
+  }
+
+  .edu-layout {
+    position: relative;
+  }
+
+  .edu-content {
+    max-width: 540px;
+  }
+
+  .edu-meta {
+    margin-bottom: var(--sp-5);
+  }
+
+  .edu-degree {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--text-1);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .edu-college {
+    font-size: 0.84rem;
+    color: var(--text-3);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .edu-date {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    color: var(--text-4);
+    text-transform: uppercase;
+  }
+
+  .award-label {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-sage);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .award-text {
+    font-size: 0.84rem;
+    color: var(--text-2);
+  }
+
+  .coursework {
+    margin-top: var(--sp-5);
+  }
+
+  .coursework-label {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-5);
+    display: block;
+    margin-bottom: var(--sp-3);
+  }
+
+  .coursework-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .edu-image-wrap {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 140px;
+  }
+
+  .edu-image {
+    width: 100%;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+
+  .edu-image:hover {
+    opacity: 0.9;
+  }
+
+  @media (max-width: 900px) {
+    .edu-image-wrap {
+      display: none;
+    }
+  }
+</style>
