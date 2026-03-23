@@ -45,17 +45,15 @@ import data from '../data/education.json';
 <style>
   h2 {
     margin-top: 6px;
-    margin-bottom: var(--sp-6);
+    margin-bottom: var(--sp-3);
   }
 
   .edu-layout {
-    display: flex;
-    gap: var(--sp-8);
-    align-items: flex-start;
+    position: relative;
   }
 
   .edu-content {
-    flex: 1;
+    max-width: 540px;
   }
 
   .edu-meta {
@@ -121,7 +119,9 @@ import data from '../data/education.json';
   }
 
   .edu-image-wrap {
-    flex-shrink: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
     width: 140px;
   }
 
@@ -135,14 +135,9 @@ import data from '../data/education.json';
     opacity: 0.9;
   }
 
-  @media (max-width: 768px) {
-    .edu-layout {
-      flex-direction: column-reverse;
-      align-items: center;
-    }
-
+  @media (max-width: 900px) {
     .edu-image-wrap {
-      width: 100px;
+      display: none;
     }
   }
 </style>
