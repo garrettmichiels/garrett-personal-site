@@ -17,17 +17,6 @@ const accentMap: Record<string, string> = {
   <SectionLabel text="Experience" accent="var(--accent-sand)" />
   <h2>Where I've built things</h2>
 
-  <!-- Key Impacts -->
-  <div class="impacts">
-    {data.keyImpacts.map((impact) => (
-      <div class="impact-card">
-        <span class="impact-value">{impact.value}</span>
-        <span class="impact-label">{impact.label}</span>
-        <p class="impact-desc">{impact.description}</p>
-      </div>
-    ))}
-  </div>
-
   <!-- Roles -->
   <div class="roles">
     {data.roles.map((role, i) => (
