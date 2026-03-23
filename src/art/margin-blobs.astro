@@ -1,0 +1,52 @@
+---
+/**
+ * Organic blob shapes for the Hero section margin.
+ * Translucent overlapping forms in sand/slate tones.
+ */
+---
+
+<div class="margin-blobs" aria-hidden="true">
+  <svg viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+    <!-- Large sand blob -->
+    <path
+      d="M120,40 C160,20 190,60 180,110 C170,160 200,190 170,230 C140,270 100,240 90,200 C80,160 60,140 80,100 C100,60 80,60 120,40Z"
+      fill="#E8D5B7"
+      opacity="0.04"
+    />
+    <!-- Medium slate blob -->
+    <path
+      d="M60,120 C100,90 150,110 140,160 C130,210 160,250 120,270 C80,290 40,260 50,220 C60,180 20,150 60,120Z"
+      fill="#B7D4E8"
+      opacity="0.035"
+    />
+    <!-- Small accent dot cluster -->
+    <circle cx="140" cy="80" r="3" fill="#E8D5B7" opacity="0.12" />
+    <circle cx="155" cy="95" r="2" fill="#E8D5B7" opacity="0.08" />
+    <circle cx="130" cy="100" r="1.5" fill="#B7D4E8" opacity="0.1" />
+    <circle cx="90" cy="300" r="2.5" fill="#E8D5B7" opacity="0.1" />
+    <circle cx="105" cy="315" r="1.5" fill="#B7D4E8" opacity="0.07" />
+  </svg>
+</div>
+
+<style>
+  .margin-blobs {
+    position: absolute;
+    top: -40px;
+    right: -120px;
+    width: 200px;
+    height: 400px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .margin-blobs svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 900px) {
+    .margin-blobs {
+      display: none;
+    }
+  }
+</style>

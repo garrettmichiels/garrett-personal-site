@@ -1,0 +1,25 @@
+---
+interface Props {
+  text: string;
+  accent?: string;
+}
+
+const { text, accent } = Astro.props;
+---
+
+<span class="section-label" style={accent ? `color: ${accent}` : undefined}>
+  {text}
+</span>
+
+<style>
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-5);
+    margin-bottom: 6px;
+    display: block;
+  }
+</style>

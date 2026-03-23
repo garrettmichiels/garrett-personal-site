@@ -1,0 +1,19 @@
+{
+  "degree": "Bachelor of Science in Computer Science",
+  "institution": "Northeastern University",
+  "college": "Khoury College of Computer Sciences",
+  "location": "Boston, MA",
+  "year": "2020 — 2024",
+  "awards": ["Khoury College of Computer Sciences Co-Op Award, 2024"],
+  "coursework": [
+    "Algorithms & Data Structures",
+    "Software Development",
+    "Networks & Distributed Systems",
+    "Theory of Computation",
+    "Computer Systems",
+    "Database Design",
+    "Web Development",
+    "Mobile Development"
+  ],
+  "image": "/images/northeastern-ring.png"
+}

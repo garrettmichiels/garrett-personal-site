@@ -1,0 +1,54 @@
+[
+  {
+    "title": "The Bitter Lesson",
+    "author": "Rich Sutton",
+    "url": "http://www.incompleteideas.net/IncIdeas/BitterLesson.html",
+    "type": "article",
+    "tags": ["ai", "machine-learning"],
+    "dateAdded": "2025-01-15",
+    "note": "The foundational argument for why general-purpose methods leveraging computation win over human-engineered features."
+  },
+  {
+    "title": "Scaling Monosemanticity",
+    "author": "Anthropic",
+    "url": "https://transformer-circuits.pub/2024/scaling-monosemanticity/",
+    "type": "paper",
+    "tags": ["ai", "interpretability"],
+    "dateAdded": "2025-03-10",
+    "note": "Mechanistic interpretability at scale — understanding what features Claude's neurons represent."
+  },
+  {
+    "title": "How to Do Great Work",
+    "author": "Paul Graham",
+    "url": "https://paulgraham.com/greatwork.html",
+    "type": "article",
+    "tags": ["career", "thinking"],
+    "dateAdded": "2025-02-20"
+  },
+  {
+    "title": "Designing Data-Intensive Applications",
+    "author": "Martin Kleppmann",
+    "url": "https://dataintensive.net/",
+    "type": "book",
+    "tags": ["systems", "data-engineering"],
+    "dateAdded": "2025-01-05",
+    "note": "The definitive reference for understanding distributed systems, replication, and stream processing."
+  },
+  {
+    "title": "Why AI Agents Need Better Guardrails",
+    "author": "Simon Willison",
+    "url": "https://simonwillison.net/2024/Mar/14/prompt-injection/",
+    "type": "blog",
+    "tags": ["ai", "security"],
+    "dateAdded": "2025-03-01",
+    "note": "Prompt injection remains unsolved — relevant to my work on LLM input classification at Wayfair."
+  },
+  {
+    "title": "The Staff Engineer's Path",
+    "author": "Tanya Reilly",
+    "url": "https://www.oreilly.com/library/view/the-staff-engineers/9781098118730/",
+    "type": "book",
+    "tags": ["career", "engineering-leadership"],
+    "dateAdded": "2025-02-10"
+  }
+]
