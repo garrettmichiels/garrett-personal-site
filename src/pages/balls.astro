@@ -1,0 +1,319 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Quotes — Garrett" description="Colored balls with quotes">
+  <div id="scene">
+    <canvas id="canvas"></canvas>
+
+    <div id="hud">
+      <a href="/" class="back-link">← back</a>
+      <p class="hint">hover a ball</p>
+    </div>
+
+    <div id="tooltip">
+      <p id="tooltip-text"></p>
+      <span id="tooltip-author"></span>
+    </div>
+  </div>
+</BaseLayout>
+
+<!-- Load Matter.js from CDN, then run our physics code -->
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+
+<script is:inline>
+(function () {
+  const QUOTES = [
+    { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+    { text: "In the middle of difficulty lies opportunity.", author: "Albert Einstein" },
+    { text: "Talk is cheap. Show me the code.", author: "Linus Torvalds" },
+    { text: "First, solve the problem. Then, write the code.", author: "John Johnson" },
+    { text: "Any fool can write code a computer understands. Good programmers write code humans understand.", author: "Martin Fowler" },
+    { text: "Make it work, make it right, make it fast.", author: "Kent Beck" },
+    { text: "Programs must be written for people to read, and only incidentally for machines to execute.", author: "Abelson & Sussman" },
+    { text: "Simplicity is the soul of efficiency.", author: "Austin Freeman" },
+    { text: "The best time to plant a tree was 20 years ago. The second best time is now.", author: "Chinese Proverb" },
+    { text: "It always seems impossible until it's done.", author: "Nelson Mandela" },
+    { text: "Creativity is intelligence having fun.", author: "Albert Einstein" },
+    { text: "The function of good software is to make the complex appear simple.", author: "Grady Booch" },
+    { text: "In theory, there is no difference between theory and practice. In practice, there is.", author: "Yogi Berra" },
+    { text: "The measure of intelligence is the ability to change.", author: "Albert Einstein" },
+    { text: "An idea that is not dangerous is unworthy of being called an idea at all.", author: "Oscar Wilde" },
+    { text: "The way to get started is to quit talking and begin doing.", author: "Walt Disney" },
+    { text: "Life is what happens when you're busy making other plans.", author: "John Lennon" },
+    { text: "Debugging is twice as hard as writing the code in the first place.", author: "Brian Kernighan" },
+    { text: "The greatest glory in living lies not in never falling, but in rising every time we fall.", author: "Nelson Mandela" },
+    { text: "The only source of knowledge is experience.", author: "Albert Einstein" },
+    { text: "Code never lies, comments sometimes do.", author: "Ron Jeffries" },
+    { text: "Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away.", author: "Antoine de Saint-Exupéry" },
+  ];
+
+  const COLORS = [
+    '#C4A882', // sand
+    '#7C9E82', // sage
+    '#C07272', // rose
+    '#C4A248', // gold
+    '#7A8FA6', // slate-blue
+    '#A07CB0', // soft purple
+    '#6BA8A0', // teal
+    '#B0885C', // warm brown
+  ];
+
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const tooltip = document.getElementById('tooltip');
+  const tooltipText = document.getElementById('tooltip-text');
+  const tooltipAuthor = document.getElementById('tooltip-author');
+
+  let W = window.innerWidth;
+  let H = window.innerHeight;
+  canvas.width = W;
+  canvas.height = H;
+
+  const { Engine, Bodies, Composite, Runner, Events } = Matter;
+
+  const engine = Engine.create({ gravity: { y: 1.8 } });
+  const world = engine.world;
+  const runner = Runner.create();
+
+  function buildWalls() {
+    return [
+      Bodies.rectangle(W / 2, H + 30, W + 120, 60, { isStatic: true, label: 'wall' }),
+      Bodies.rectangle(-30, H / 2, 60, H * 3, { isStatic: true, label: 'wall' }),
+      Bodies.rectangle(W + 30, H / 2, 60, H * 3, { isStatic: true, label: 'wall' }),
+    ];
+  }
+
+  let walls = buildWalls();
+  Composite.add(world, walls);
+
+  // Shuffle quotes so every page load is different
+  const shuffled = [...QUOTES].sort(() => Math.random() - 0.5);
+
+  const balls = [];
+
+  function dropBall(quote, colorHex, delay) {
+    setTimeout(() => {
+      const r = 26 + Math.random() * 22;
+      const x = r + Math.random() * (W - r * 2);
+      const body = Bodies.circle(x, -r - Math.random() * 200, r, {
+        restitution: 0.45,
+        friction: 0.08,
+        frictionAir: 0.008,
+        label: 'ball',
+      });
+      body._color = colorHex;
+      body._quote = quote;
+      Composite.add(world, body);
+      balls.push(body);
+    }, delay);
+  }
+
+  shuffled.forEach((q, i) => {
+    const color = COLORS[i % COLORS.length];
+    dropBall(q, color, i * 180 + Math.random() * 80);
+  });
+
+  Runner.run(runner, engine);
+
+  // ── Render loop ──────────────────────────────────────────────────────────
+
+  function drawBall(body) {
+    const { x, y } = body.position;
+    const r = body.circleRadius;
+
+    ctx.save();
+
+    // Drop shadow
+    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+    ctx.shadowBlur = 12;
+    ctx.shadowOffsetY = 4;
+
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = body._color;
+    ctx.fill();
+
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetY = 0;
+
+    // Gloss highlight
+    const grd = ctx.createRadialGradient(
+      x - r * 0.3, y - r * 0.35, r * 0.05,
+      x, y, r
+    );
+    grd.addColorStop(0, 'rgba(255,255,255,0.30)');
+    grd.addColorStop(0.5, 'rgba(255,255,255,0.06)');
+    grd.addColorStop(1, 'rgba(0,0,0,0.18)');
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = grd;
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    for (const b of balls) drawBall(b);
+    requestAnimationFrame(loop);
+  }
+
+  requestAnimationFrame(loop);
+
+  // ── Hover / tooltip ──────────────────────────────────────────────────────
+
+  let hoveredBall = null;
+
+  canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    let found = null;
+    for (const b of balls) {
+      const dx = mx - b.position.x;
+      const dy = my - b.position.y;
+      if (Math.sqrt(dx * dx + dy * dy) <= b.circleRadius) {
+        found = b;
+        break;
+      }
+    }
+
+    if (found) {
+      hoveredBall = found;
+      canvas.style.cursor = 'pointer';
+
+      tooltipText.textContent = '“' + found._quote.text + '”';
+      tooltipAuthor.textContent = '— ' + found._quote.author;
+
+      // Keep tooltip on screen
+      const tx = Math.min(e.clientX + 18, W - 320);
+      const ty = Math.max(e.clientY - 10, 10);
+      tooltip.style.left = tx + 'px';
+      tooltip.style.top = ty + 'px';
+      tooltip.classList.add('visible');
+    } else {
+      hoveredBall = null;
+      canvas.style.cursor = 'default';
+      tooltip.classList.remove('visible');
+    }
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    hoveredBall = null;
+    tooltip.classList.remove('visible');
+    canvas.style.cursor = 'default';
+  });
+
+  // ── Resize ───────────────────────────────────────────────────────────────
+
+  window.addEventListener('resize', () => {
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W;
+    canvas.height = H;
+
+    for (const w of walls) Composite.remove(world, w);
+    walls = buildWalls();
+    Composite.add(world, walls);
+  });
+})();
+</script>
+
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --text: #e8e0d4;
+    --subtext: #888;
+  }
+
+  :global(body) {
+    margin: 0;
+    overflow: hidden;
+    background: var(--bg);
+  }
+
+  #scene {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+  }
+
+  #canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  #hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 28px;
+    pointer-events: none;
+  }
+
+  .back-link {
+    pointer-events: all;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--subtext);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover {
+    color: var(--text);
+  }
+
+  .hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--subtext);
+    letter-spacing: 0.06em;
+    margin: 0;
+    opacity: 0.6;
+  }
+
+  #tooltip {
+    position: fixed;
+    max-width: 300px;
+    background: rgba(20, 20, 20, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 14px 18px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    backdrop-filter: blur(8px);
+    z-index: 100;
+  }
+
+  #tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #tooltip-text {
+    font-family: Georgia, serif;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: #e8e0d4;
+    margin: 0 0 8px;
+  }
+
+  #tooltip-author {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: #888;
+    letter-spacing: 0.04em;
+  }
+</style>
