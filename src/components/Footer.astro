@@ -11,14 +11,18 @@ const currentYear = new Date().getFullYear();
       <span class="footer-sep">/</span>
       <a href="https://www.linkedin.com/in/garrett-michiels/" target="_blank" rel="noopener noreferrer" class="footer-link">LinkedIn</a>
     </div>
-    <span class="footer-copy">&copy; {currentYear} Garrett Michiels</span>
+    <span class="footer-copy">
+      <span class="footer-brand" id="footer-brand">garrettmichiels.com</span>
+      &nbsp;·&nbsp; &copy;{currentYear}
+    </span>
   </div>
 </footer>
 
 <style>
   .footer {
     border-top: 1px solid var(--border-subtle);
-    padding: var(--sp-8) var(--sp-8);
+    padding: var(--sp-8);
+    background: var(--bg-raised);
   }
 
   .footer-inner {
@@ -37,15 +41,15 @@ const currentYear = new Date().getFullYear();
 
   .footer-link {
     font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-4);
     transition: color 0.2s ease;
   }
 
   .footer-link:hover {
-    color: var(--accent-sand);
+    color: var(--accent);
   }
 
   .footer-sep {
@@ -53,10 +57,22 @@ const currentYear = new Date().getFullYear();
     font-size: 0.7rem;
   }
 
+  .footer-brand {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .brand-dot {
+    color: var(--accent);
+  }
+
   .footer-copy {
     font-family: var(--font-mono);
-    font-size: 0.55rem;
-    letter-spacing: 0.08em;
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
     color: var(--text-5);
   }
 
@@ -64,6 +80,16 @@ const currentYear = new Date().getFullYear();
     .footer-inner {
       flex-direction: column;
       gap: var(--sp-3);
+      text-align: center;
     }
   }
 </style>
+
+<script>
+  const el = document.getElementById('footer-brand');
+  if (el) {
+    const host = window.location.hostname;
+    const known = ['garrettmichiels.com', 'garrettm.dev'];
+    el.textContent = known.includes(host) ? host : 'garrettmichiels.com';
+  }
+</script>
