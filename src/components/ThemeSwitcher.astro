@@ -235,6 +235,14 @@ const themes = [
 </style>
 
 <script>
+  import { defineSound } from '@web-kits/audio';
+
+  const themeClick = defineSound({
+    source: { type: 'sine', frequency: { start: 880, end: 620 } },
+    envelope: { attack: 0, decay: 0.055 },
+    gain: 0.12,
+  });
+
   const STORAGE_KEY = 'gm-theme';
   const DEFAULT     = 'paper';
 
@@ -301,6 +309,7 @@ const themes = [
 
   options.forEach((btn) => {
     btn.addEventListener('click', () => {
+      themeClick();
       applyTheme(btn.dataset.themeId ?? DEFAULT);
       setOpen(false);
     });

@@ -62,14 +62,15 @@ import portrait from '../assets/images/garrett-portrait.jpeg';
 </section>
 
 <script>
-  const portrait = document.getElementById('portrait');
-  const sfx = new Audio('/click-sound.m4a');
-  sfx.volume = 0.3;
+  import { defineSound } from '@web-kits/audio';
 
-  portrait?.addEventListener('click', () => {
-    sfx.currentTime = 0;
-    sfx.play();
+  const pop = defineSound({
+    source: { type: 'sine', frequency: { start: 650, end: 180 } },
+    envelope: { attack: 0, decay: 0.09 },
+    gain: 0.28,
   });
+
+  document.getElementById('portrait')?.addEventListener('click', () => pop());
 </script>
 
 <style>
