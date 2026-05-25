@@ -28,7 +28,7 @@ const {
 
     <title>{title}</title>
 
-    <!-- Restore theme before first paint to avoid flash -->
+    <!-- Restore theme before first paint -->
     <script is:inline>
       (function () {
         var t = localStorage.getItem('gm-theme');
@@ -42,17 +42,17 @@ const {
     <!-- Stat counter animations -->
     <script>
       function animateCounter(el: HTMLElement) {
-        const target  = parseInt(el.dataset.counter ?? '0', 10);
-        const suffix  = el.dataset.suffix  ?? '';
-        const prefix  = el.dataset.prefix  ?? '';
+        const target   = parseInt(el.dataset.counter ?? '0', 10);
+        const suffix   = el.dataset.suffix ?? '';
+        const prefix   = el.dataset.prefix ?? '';
         const duration = 1800;
-        const start   = performance.now();
+        const start    = performance.now();
 
         const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
         function tick(now: number) {
           const progress = Math.min((now - start) / duration, 1);
-          el.textContent  = prefix + Math.round(easeOut(progress) * target) + suffix;
+          el.textContent = prefix + Math.round(easeOut(progress) * target) + suffix;
           if (progress < 1) requestAnimationFrame(tick);
         }
 
@@ -71,6 +71,39 @@ const {
       document.querySelectorAll<HTMLElement>('[data-counter]').forEach((el) => {
         counterObserver.observe(el);
       });
+    </script>
+
+    <!-- Motion.dev scroll + entrance animations -->
+    <script>
+      import { animate, inView, stagger } from 'motion';
+
+      function reveal(els: HTMLElement[], opts: { y?: number; duration?: number; delay?: number | ((i: number) => number) }) {
+        els.forEach(el => { el.style.opacity = '0'; });
+        animate(els, { opacity: [0, 1], y: [opts.y ?? 10, 0] }, {
+          duration: opts.duration ?? 0.5,
+          delay: opts.delay ?? 0,
+          easing: [0.25, 0.46, 0.45, 0.94],
+        }).then(() => {
+          els.forEach(el => { el.style.opacity = '1'; el.style.transform = ''; });
+        });
+      }
+
+      // Hero entrance — stagger all elements in
+      const heroEls = [
+        document.querySelector<HTMLElement>('.hero-image-wrap'),
+        document.querySelector<HTMLElement>('.hero-content .section-label-wrap'),
+        document.querySelector<HTMLElement>('.hero-content h1'),
+        document.querySelector<HTMLElement>('.hero-content .hero-bio'),
+        document.querySelector<HTMLElement>('.hero-content .hero-ctas'),
+      ].filter((el): el is HTMLElement => el !== null);
+
+      if (heroEls.length) reveal(heroEls, { delay: stagger(0.1) });
+
+      // Role cards — stagger in when the Experience section enters view
+      inView('.roles', () => {
+        const items = [...document.querySelectorAll<HTMLElement>('.stagger-item')];
+        if (items.length) reveal(items, { y: 12, duration: 0.4, delay: stagger(0.15) });
+      }, { amount: 0.1 });
     </script>
 
   </body>
