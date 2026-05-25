@@ -18,7 +18,10 @@ const logos: Record<string, ImageMetadata> = Object.fromEntries(
 
 /** Wrap notable numbers in data-counter spans for the animation script. */
 function highlightNumbers(text: string): string {
-  return text.replace(/~?(\d+)(k\+|%)/gi, (match, num, unit) => {
+  // Strip tags from source text before injecting into set:html to prevent XSS
+  // if this data source ever changes from a local file to an external feed.
+  const safe = text.replace(/<[^>]*>/g, '');
+  return safe.replace(/~?(\d+)(k\+|%)/gi, (match, num, unit) => {
     const prefix = match.startsWith('~') ? '~' : '';
     const suffix = unit.toLowerCase();
     return `${prefix}<span data-counter="${num}" data-suffix="${suffix}">${num}${suffix}</span>`;
