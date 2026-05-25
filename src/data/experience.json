@@ -19,8 +19,20 @@
   "roles": [
     {
       "title": "Software Engineer",
+      "company": "Clarasight",
+      "date": "March 2026 — Present",
+      "location": "Boston, MA",
+      "logo": "clarasight.jpg",
+      "details": [
+        "Deployed an ML Model for flight price predictions in AWS",
+        "Implemented AI-powered meeting location suggestion tool"
+      ],
+      "skills": ["Typescript", "LLMs", "AWS"]
+    },
+    {
+      "title": "Software Engineer",
       "company": "Wayfair",
-      "date": "November 2024 — Present",
+      "date": "November 2024 — March 2026",
       "location": "Boston, MA",
       "logo": "wayfair.jpg",
       "details": [
@@ -28,7 +40,7 @@
         "Architected a Kafka-based agent status tracking system processing 400k+ messages/day using Avro schemas, Spring Boot JPA, and batch processing.",
         "Built a Composer Airflow data pipeline with dbt and Python for metadata aggregation — deduplication, continuous updates, executes in under one minute."
       ],
-      "skills": ["Python", "SQL", "Airflow", "dbt", "Kafka", "Spring Boot", "GraphQL", "GCP", "LLMs"]
+      "skills": ["Java", "Python", "SQL", "Airflow", "dbt", "Kafka", "Spring Boot", "GraphQL", "GCP", "LLMs"]
     },
     {
       "title": "Software Developer Intern",
