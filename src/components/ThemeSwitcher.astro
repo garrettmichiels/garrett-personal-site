@@ -1,0 +1,326 @@
+---
+const themes = [
+  {
+    id:      'paper',
+    name:    'Paper',
+    bg:      '#F8F7F3',
+    surface: '#FFFFFF',
+    accent:  '#3D7A5A',
+  },
+  {
+    id:      'sage',
+    name:    'Sage',
+    bg:      '#C2D9CC',
+    surface: '#EAF3EE',
+    accent:  '#255240',
+  },
+  {
+    id:      'warm',
+    name:    'Warm',
+    bg:      '#FDF3E3',
+    surface: '#FFFFFF',
+    accent:  '#C8822A',
+  },
+];
+---
+
+<div class="ts-wrap" id="theme-switcher">
+  <!-- Toggle button — shows current bg as a swatch dot -->
+  <button
+    class="ts-toggle"
+    id="ts-toggle"
+    aria-label="Switch color theme"
+    aria-expanded="false"
+    aria-controls="ts-panel"
+  >
+    <span class="ts-toggle-dot" id="ts-toggle-dot"></span>
+    <span class="ts-toggle-label">Theme</span>
+  </button>
+
+  <!-- Panel -->
+  <div class="ts-panel" id="ts-panel" role="listbox" aria-label="Color themes">
+    <div class="ts-panel-header">Theme</div>
+    {themes.map((t) => (
+      <button
+        class="ts-option"
+        role="option"
+        data-theme-id={t.id}
+        aria-label={`${t.name} theme`}
+      >
+        <span class="ts-swatch-wrap">
+          <!-- Background swatch -->
+          <span class="ts-swatch-bg" style={`background: ${t.bg};`} />
+          <!-- Surface swatch -->
+          <span class="ts-swatch-surface" style={`background: ${t.surface};`} />
+          <!-- Accent dot -->
+          <span class="ts-swatch-accent" style={`background: ${t.accent};`} />
+        </span>
+        <span class="ts-option-name">{t.name}</span>
+        <span class="ts-check" aria-hidden="true">✓</span>
+      </button>
+    ))}
+  </div>
+</div>
+
+<style>
+  /* ── Wrapper ── */
+  .ts-wrap {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  /* ── Toggle button ── */
+  .ts-toggle {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-medium);
+    border-radius: 100px;
+    padding: 6px 12px 6px 8px;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  }
+
+  .ts-toggle:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+
+  .ts-toggle-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-medium);
+    display: block;
+    transition: background 0.25s ease;
+    /* JS sets background-color */
+  }
+
+  .ts-toggle-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-4);
+  }
+
+  /* ── Panel ── */
+  .ts-panel {
+    background: var(--bg-raised);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    padding: 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 148px;
+
+    /* Slide-up entrance */
+    transform: translateY(6px);
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+  }
+
+  .ts-panel.open {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ts-panel-header {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-5);
+    padding: 4px 8px 6px;
+    border-bottom: 1px solid var(--border-ghost);
+    margin-bottom: 2px;
+  }
+
+  /* ── Theme options ── */
+  .ts-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 8px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid transparent;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    width: 100%;
+    text-align: left;
+  }
+
+  .ts-option:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-subtle);
+  }
+
+  .ts-option[aria-selected="true"] {
+    background: var(--accent-soft);
+    border-color: var(--accent-muted);
+  }
+
+  /* Swatch group */
+  .ts-swatch-wrap {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .ts-swatch-bg,
+  .ts-swatch-surface {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .ts-swatch-surface {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    margin-left: -6px;
+    box-shadow: -1px 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .ts-swatch-accent {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-left: 2px;
+  }
+
+  .ts-option-name {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--text-2);
+    flex: 1;
+    letter-spacing: 0.02em;
+  }
+
+  .ts-check {
+    font-size: 0.62rem;
+    color: var(--accent);
+    opacity: 0;
+    transition: opacity 0.15s;
+    flex-shrink: 0;
+  }
+
+  .ts-option[aria-selected="true"] .ts-check {
+    opacity: 1;
+  }
+
+  /* Hide on very small screens */
+  @media (max-width: 480px) {
+    .ts-wrap {
+      bottom: 16px;
+      right: 16px;
+    }
+  }
+</style>
+
+<script>
+  import { defineSound } from '@web-kits/audio';
+
+  const themeClick = defineSound({
+    source: { type: 'sine', frequency: { start: 880, end: 620 } },
+    envelope: { attack: 0, decay: 0.055 },
+    gain: 0.12,
+  });
+
+  const STORAGE_KEY = 'gm-theme';
+  const DEFAULT     = 'paper';
+
+  const themes = {
+    paper: { bg: '#F8F7F3' },
+    sage:  { bg: '#C2D9CC' },
+    warm:  { bg: '#FDF3E3' },
+  };
+
+  // ── State ──
+  let current: string = localStorage.getItem(STORAGE_KEY) ?? DEFAULT;
+  let open    = false;
+
+  // ── Elements ──
+  const html   = document.documentElement;
+  const toggle = document.getElementById('ts-toggle')!;
+  const dot    = document.getElementById('ts-toggle-dot')!;
+  const panel  = document.getElementById('ts-panel')!;
+  const options = panel.querySelectorAll<HTMLButtonElement>('.ts-option');
+
+  // ── Apply theme ──
+  function applyTheme(id: string) {
+    current = id;
+    if (id === DEFAULT) {
+      html.removeAttribute('data-theme');
+    } else {
+      html.setAttribute('data-theme', id);
+    }
+    localStorage.setItem(STORAGE_KEY, id);
+
+    // Update toggle dot color
+    dot.style.background = (themes as Record<string, { bg: string }>)[id]?.bg ?? '#F8F7F3';
+
+    // Update option selected states
+    options.forEach((btn) => {
+      const selected = btn.dataset.themeId === id;
+      btn.setAttribute('aria-selected', String(selected));
+    });
+  }
+
+  // ── Toggle panel ──
+  function setOpen(state: boolean) {
+    open = state;
+    toggle.setAttribute('aria-expanded', String(state));
+    if (state) {
+      panel.style.display = 'flex';
+      // Force reflow so transition fires
+      panel.getBoundingClientRect();
+      panel.classList.add('open');
+    } else {
+      panel.classList.remove('open');
+      // Wait for transition before hiding
+      panel.addEventListener('transitionend', () => {
+        if (!open) panel.style.display = 'none';
+      }, { once: true });
+    }
+  }
+
+  // ── Wire events ──
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setOpen(!open);
+  });
+
+  options.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      themeClick();
+      applyTheme(btn.dataset.themeId ?? DEFAULT);
+      setOpen(false);
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (open && !document.getElementById('theme-switcher')!.contains(e.target as Node)) {
+      setOpen(false);
+    }
+  });
+
+  // ── Init ──
+  applyTheme(current);
+</script>

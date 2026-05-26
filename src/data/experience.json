@@ -19,23 +19,35 @@
   "roles": [
     {
       "title": "Software Engineer",
-      "company": "Wayfair",
-      "date": "November 2024 — Present",
+      "company": "Clarasight",
+      "date": "March 2026 — Present",
       "location": "Boston, MA",
-      "logo": "/images/wayfair.jpg",
+      "logo": "clarasight.jpg",
+      "details": [
+        "Deployed an ML Model for flight price predictions in AWS",
+        "Implemented AI-powered meeting location suggestion tool"
+      ],
+      "skills": ["Typescript", "LLMs", "AWS"]
+    },
+    {
+      "title": "Software Engineer",
+      "company": "Wayfair",
+      "date": "November 2024 — March 2026",
+      "location": "Boston, MA",
+      "logo": "wayfair.jpg",
       "details": [
         "Designed an LLM-as-a-judge input classification layer for a production chatbot, reducing incorrect escalations by ~23% with real-time alerting for high-risk inputs.",
         "Architected a Kafka-based agent status tracking system processing 400k+ messages/day using Avro schemas, Spring Boot JPA, and batch processing.",
         "Built a Composer Airflow data pipeline with dbt and Python for metadata aggregation — deduplication, continuous updates, executes in under one minute."
       ],
-      "skills": ["Python", "SQL", "Airflow", "dbt", "Kafka", "Spring Boot", "GraphQL", "GCP", "LLMs"]
+      "skills": ["Java", "Python", "SQL", "Airflow", "dbt", "Kafka", "Spring Boot", "GraphQL", "GCP", "LLMs"]
     },
     {
       "title": "Software Developer Intern",
       "company": "BlackBerry",
       "date": "September — December 2023",
       "location": "Austin, TX",
-      "logo": "/images/blackberry.png",
+      "logo": "blackberry.png",
       "details": [
         "Implemented high-performance API bulk operations using Spring JPA and S3, improving query processing time for two high-priority products.",
         "Integrated audit logging across a new Java microservice with Kafka pipelines to the legacy audit system."
@@ -47,7 +59,7 @@
       "company": "Wellframe",
       "date": "January — July 2022",
       "location": "Boston, MA",
-      "logo": "/images/wellframe.jpg",
+      "logo": "wellframe.jpg",
       "details": [
         "Leveraged Kubernetes to automate database operations, reducing create/delete times by 95% and enabling concurrent SQL instance operations.",
         "Built automated environment data population replacing a manual Postgres backup/restore process — 40 minutes down to 10."

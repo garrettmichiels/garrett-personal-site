@@ -1,50 +1,7 @@
 /* ============================================
-   Editorial Dark Minimalism — Design System
+   Light Editorial Design System
+   Fun. Technical. With Gravitas.
    ============================================ */
-
-/* --- Font Faces --- */
-
-@font-face {
-  font-family: 'Playfair Display';
-  src: url('/fonts/PlayfairDisplay-VariableFont_wght.ttf') format('truetype');
-  font-weight: 400 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Playfair Display';
-  src: url('/fonts/PlayfairDisplay-Italic-VariableFont_wght.ttf') format('truetype');
-  font-weight: 400 900;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'DM Mono';
-  src: url('/fonts/DMMono-Light.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'DM Mono';
-  src: url('/fonts/DMMono-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'DM Mono';
-  src: url('/fonts/DMMono-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* --- Reset --- */
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -55,42 +12,65 @@
 /* --- Custom Properties --- */
 
 :root {
-  /* Surfaces */
-  --bg-base:     #0F0F0F;
-  --bg-raised:   rgba(255,255,255,0.03);
-  --bg-overlay:  rgba(255,255,255,0.06);
-  --bg-hover:    rgba(255,255,255,0.05);
+  /* Green palette */
+  --green:       #3D7A5A;
+  --green-light: #EAF3EE;
+  --green-muted: #C2D9CC;
+  --green-deep:  #255240;
 
-  /* Text hierarchy */
-  --text-1:      #E8E2D9;
-  --text-2:      #C8C0B4;
-  --text-3:      #B0A898;
-  --text-4:      #888;
-  --text-5:      #666;
-  --text-6:      #444;
+  /* Neutral palette */
+  --ink:   #141410;
+  --ink-2: #3A3A34;
+  --ink-3: #7A7A70;
+  --ink-4: #B8B8B0;
+  --paper: #F8F7F3;
+  --white: #FFFFFF;
 
-  /* Borders */
-  --border-strong:  rgba(255,255,255,0.12);
-  --border-medium:  rgba(255,255,255,0.08);
-  --border-subtle:  rgba(255,255,255,0.06);
-  --border-ghost:   rgba(255,255,255,0.03);
+  /* Amber accent */
+  --amber:       #C8822A;
+  --amber-light: #FDF3E3;
+  --amber-deep:  #A06820;
 
-  /* Accents */
-  --accent-sand:        #E8D5B7;
-  --accent-sand-deep:   #C4A882;
-  --accent-slate:       #B7D4E8;
-  --accent-slate-deep:  #82AAC4;
-  --accent-sage:        #B7E8C8;
-  --accent-sage-deep:   #82C49A;
-  --accent-rose:        #E8B7D4;
-  --accent-rose-deep:   #C482AA;
-  --accent-gold:        #E8E0B7;
-  --accent-gold-deep:   #C4B882;
+  /* Semantic tokens — keep old names so components don't break */
+  --bg-base:   var(--paper);
+  --bg-raised: var(--white);
+  --bg-hover:  var(--green-light);
+
+  --text-1: var(--ink);
+  --text-2: var(--ink-2);
+  --text-3: var(--ink-3);
+  --text-4: var(--ink-4);
+  --text-5: #9A9A90;
+  --text-6: #C0C0B8;
+
+  --border-strong:  rgba(0,0,0,0.12);
+  --border-medium:  rgba(0,0,0,0.08);
+  --border-subtle:  rgba(0,0,0,0.06);
+  --border-ghost:   rgba(0,0,0,0.04);
+
+  /* Primary accent: green (was sand) */
+  --accent-sand:       var(--green);
+  --accent-sand-deep:  var(--green-deep);
+  /* Education accent: green */
+  --accent-sage:       var(--green);
+  --accent-sage-deep:  var(--green-deep);
+  /* BlackBerry accent: amber */
+  --accent-slate:      var(--amber);
+  --accent-slate-deep: var(--amber-deep);
+  /* Wellframe accent: deep pine */
+  --accent-rose:       var(--green-deep);
+  --accent-rose-deep:  var(--green-deep);
+
+  /* Theme accent — swaps per theme to drive metrics, CTAs, links */
+  --accent:       var(--green);
+  --accent-deep:  var(--green-deep);
+  --accent-soft:  var(--green-light);
+  --accent-muted: var(--green-muted);
 
   /* Typography */
-  --font-heading: 'Playfair Display', Georgia, serif;
-  --font-mono:    'DM Mono', 'Courier New', monospace;
-  --font-body:    Georgia, 'Times New Roman', serif;
+  --font-heading: 'Instrument Serif', Georgia, serif;
+  --font-mono:    'JetBrains Mono', 'Courier New', monospace;
+  --font-body:    'Geist', system-ui, sans-serif;
 
   /* Spacing (4px scale) */
   --sp-1: 4px;   --sp-2: 8px;   --sp-3: 12px;  --sp-4: 16px;
@@ -100,6 +80,10 @@
   /* Layout */
   --max-width: 720px;
   --content-padding: var(--sp-8);
+
+  /* Radii */
+  --radius:    6px;
+  --radius-lg: 12px;
 }
 
 /* --- Base Styles --- */
@@ -144,30 +128,31 @@ img {
 
 h1, h2, h3, h4 {
   font-family: var(--font-heading);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   line-height: 1.2;
   color: var(--text-1);
+  font-weight: 400;
 }
 
 h1 {
-  font-size: clamp(1.4rem, 3vw, 2.2rem);
-  font-weight: 600;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
   line-height: 1.15;
 }
 
 h2 {
   font-size: clamp(1.1rem, 2vw, 1.6rem);
-  font-weight: 600;
 }
 
 h3 {
-  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  font-family: var(--font-body);
   font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 p {
   font-size: 0.88rem;
-  line-height: 1.7;
+  line-height: 1.75;
   color: var(--text-2);
 }
 
@@ -175,21 +160,85 @@ p {
 
 ::-webkit-scrollbar       { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.28); }
 
-/* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.15) transparent;
+  scrollbar-color: rgba(0,0,0,0.15) transparent;
 }
 
-/* --- Utility --- */
+/* --- Theme overrides ---
+   Only --bg-base and --bg-raised change per theme.
+   All accent colors, text, and typography stay identical.
+   -------------------------------------------------------- */
+
+[data-theme="sage"] {
+  --bg-base:    #C2D9CC;
+  --bg-raised:  #EAF3EE;
+  --bg-hover:   rgba(37, 82, 64, 0.12);
+
+  --border-strong:  rgba(37, 82, 64, 0.18);
+  --border-medium:  rgba(37, 82, 64, 0.13);
+  --border-subtle:  rgba(37, 82, 64, 0.09);
+  --border-ghost:   rgba(37, 82, 64, 0.05);
+
+  --accent:       var(--green-deep);
+  --accent-deep:  #173529;
+  --accent-soft:  rgba(37, 82, 64, 0.12);
+  --accent-muted: rgba(37, 82, 64, 0.25);
+
+  /* Secondary text — green-tinted grays so they don't read as muddy on sage bg */
+  --text-2: #1E3B30;
+  --text-3: #3D5147;
+  --text-4: #6B7E72;
+  --text-5: #4F6157;
+  --text-6: #8FA095;
+}
+
+[data-theme="warm"] {
+  --bg-base:    #FDF3E3;
+  --bg-raised:  #FFFFFF;
+  --bg-hover:   rgba(200, 130, 42, 0.08);
+
+  --border-strong:  rgba(200, 130, 42, 0.2);
+  --border-medium:  rgba(200, 130, 42, 0.13);
+  --border-subtle:  rgba(200, 130, 42, 0.09);
+  --border-ghost:   rgba(200, 130, 42, 0.04);
+
+  --accent:       var(--amber);
+  --accent-deep:  var(--amber-deep);
+  --accent-soft:  var(--amber-light);
+  --accent-muted: rgba(200, 130, 42, 0.3);
+
+  /* Secondary text — amber-tinted grays so they harmonize with the cream bg */
+  --text-2: #3A2E1D;
+  --text-3: #6E5636;
+  --text-4: #A89880;
+  --text-5: #806845;
+  --text-6: #C2B49E;
+}
+
+/* Smooth background transition when switching themes */
+html {
+  transition: background-color 0.3s ease;
+}
+
+/* --- Stat counters --- */
+
+[data-counter] {
+  font-weight: 600;
+  color: var(--role-accent, var(--accent));
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+}
+
+/* --- Layout Utility --- */
 
 .section {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: var(--sp-16) var(--content-padding);
+  padding: var(--sp-10) var(--content-padding);
   position: relative;
 }
 
@@ -205,7 +254,7 @@ p {
   }
 
   .section {
-    padding: var(--sp-12) var(--content-padding);
+    padding: var(--sp-8) var(--content-padding);
   }
 }
 

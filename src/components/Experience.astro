@@ -1,28 +1,51 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import SectionLabel from './SectionLabel.astro';
 import Tag from './Tag.astro';
 import CalloutBox from './CalloutBox.astro';
 import CircuitLines from '../art/circuit-lines.astro';
 import data from '../data/experience.json';
 
+const logoModules = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/images/*.{jpg,jpeg,png,webp}',
+  { eager: true }
+);
+
+const logos: Record<string, ImageMetadata> = Object.fromEntries(
+  Object.entries(logoModules).map(([path, mod]) => [path.split('/').pop()!, mod.default])
+);
+
+/** Wrap notable numbers in data-counter spans for the animation script. */
+function highlightNumbers(text: string): string {
+  // Strip tags from source text before injecting into set:html to prevent XSS
+  // if this data source ever changes from a local file to an external feed.
+  const safe = text.replace(/<[^>]*>/g, '');
+  return safe.replace(/~?(\d+)(k\+|%)/gi, (match, num, unit) => {
+    const prefix = match.startsWith('~') ? '~' : '';
+    const suffix = unit.toLowerCase();
+    return `${prefix}<span data-counter="${num}" data-suffix="${suffix}">${num}${suffix}</span>`;
+  });
+}
+
 const accentMap: Record<string, string> = {
-  'Wayfair': 'var(--accent-sand)',
-  'BlackBerry': 'var(--accent-slate)',
-  'Wellframe': 'var(--accent-sage)',
+  'Clarasight': '#595DE5',
+  'Wayfair':    '#6F229A',
+  'BlackBerry': '#244277',
+  'Wellframe':  '#2C556B',
 };
 ---
 
 <section class="section fade-in">
   <CircuitLines />
-  <SectionLabel text="Experience" accent="var(--accent-sand)" />
+  <SectionLabel text="Experience" accent="var(--accent)" />
   <h2>Where I've built things</h2>
 
-  <!-- Roles -->
   <div class="roles">
     {data.roles.map((role, i) => (
-      <div class={`role fade-in stagger-item`}>
+      <div class={`role fade-in stagger-item`} style={`--role-accent: ${accentMap[role.company] ?? 'var(--accent)'};`}>
         <div class="role-header">
-          <img src={role.logo} alt={`${role.company} logo`} class="role-logo" draggable="false" />
+          <Image src={logos[role.logo]} alt={`${role.company} logo`} width={88} height={88} class="role-logo" draggable="false" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} />
           <div class="role-meta">
             <h3>{role.title}</h3>
             <span class="role-company">{role.company}</span>
@@ -30,10 +53,10 @@ const accentMap: Record<string, string> = {
           </div>
         </div>
         <ul class="role-details">
-          {role.details.map((detail) => (
+          {role.details.map((detail, idx) => (
             <li>
-              <span class="bullet-num">{String(role.details.indexOf(detail) + 1).padStart(2, '0')}</span>
-              <span class="bullet-text">{detail}</span>
+              <span class="bullet-num">{String(idx + 1).padStart(2, '0')}</span>
+              <span class="bullet-text" set:html={highlightNumbers(detail)} />
             </li>
           ))}
         </ul>
@@ -53,55 +76,24 @@ const accentMap: Record<string, string> = {
     margin-bottom: var(--sp-8);
   }
 
-  /* Impacts */
-  .impacts {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--sp-4);
-    margin-bottom: var(--sp-10);
-  }
-
-  .impact-card {
-    background: var(--bg-raised);
-    border: 1px solid var(--border-medium);
-    border-radius: 8px;
-    padding: 18px 22px;
-  }
-
-  .impact-value {
-    font-family: var(--font-heading);
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--text-1);
-    display: block;
-    margin-bottom: 2px;
-  }
-
-  .impact-label {
-    font-family: var(--font-mono);
-    font-size: 0.58rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent-sand);
-    display: block;
-    margin-bottom: var(--sp-2);
-  }
-
-  .impact-desc {
-    font-size: 0.78rem;
-    color: var(--text-3);
-    line-height: 1.5;
-  }
-
-  /* Roles */
   .roles {
     display: flex;
     flex-direction: column;
-    gap: var(--sp-10);
+    gap: var(--sp-8);
   }
 
   .role {
-    opacity: 0;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-medium);
+    border-left: 3px solid var(--role-accent, var(--accent));
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    padding: var(--sp-6);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .role:hover {
+    transform: translateX(2px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
   }
 
   .role-header {
@@ -112,11 +104,10 @@ const accentMap: Record<string, string> = {
   }
 
   .role-logo {
-    width: 48px;
-    height: 48px;
-    border-radius: 8px;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius);
     object-fit: cover;
-    border: 1px solid var(--border-medium);
     flex-shrink: 0;
   }
 
@@ -126,33 +117,33 @@ const accentMap: Record<string, string> = {
 
   .role-meta h3 {
     margin-bottom: 2px;
+    color: var(--ink);
   }
 
   .role-company {
     font-family: var(--font-body);
-    font-size: 0.88rem;
-    color: var(--text-2);
+    font-size: 0.84rem;
+    color: var(--text-3);
     display: block;
+    margin-bottom: 2px;
   }
 
   .role-date {
     font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.08em;
-    color: var(--text-4);
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    color: var(--text-5);
     text-transform: uppercase;
   }
 
-  /* Numbered list */
   .role-details {
     margin-bottom: var(--sp-4);
-    padding-left: 62px;
   }
 
   .role-details li {
     display: flex;
     gap: 10px;
-    padding: 8px 0;
+    padding: 7px 0;
     border-bottom: 1px solid var(--border-ghost);
   }
 
@@ -162,15 +153,17 @@ const accentMap: Record<string, string> = {
 
   .bullet-num {
     font-family: var(--font-mono);
-    font-size: 0.6rem;
-    color: var(--text-5);
+    font-size: 0.58rem;
+    color: var(--role-accent, var(--accent));
     margin-top: 3px;
     flex-shrink: 0;
+    opacity: 0.7;
   }
 
   .bullet-text {
+    font-family: var(--font-body);
     font-size: 0.84rem;
-    line-height: 1.6;
+    line-height: 1.65;
     color: var(--text-2);
   }
 
@@ -178,17 +171,12 @@ const accentMap: Record<string, string> = {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    padding-left: 62px;
   }
 
   @media (max-width: 768px) {
-    .impacts {
-      grid-template-columns: 1fr;
-    }
-
-    .role-details,
-    .role-skills {
-      padding-left: 0;
+    .role {
+      border-left-width: 2px;
+      padding: var(--sp-5);
     }
   }
 </style>
