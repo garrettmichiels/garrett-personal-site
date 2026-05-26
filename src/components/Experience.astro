@@ -28,6 +28,9 @@ function highlightNumbers(text: string): string {
   });
 }
 
+// Add new companies here when adding roles to experience.json.
+// Missing entries fall back to var(--accent) — intentional, but cards will
+// lose their brand color, so update this map when adding a new role.
 const accentMap: Record<string, string> = {
   'Clarasight': '#595DE5',
   'Wayfair':    '#6F229A',
@@ -36,16 +39,20 @@ const accentMap: Record<string, string> = {
 };
 ---
 
-<section class="section fade-in">
+<section class="section">
   <CircuitLines />
   <SectionLabel text="Experience" accent="var(--accent)" />
   <h2>Where I've built things</h2>
 
   <div class="roles">
     {data.roles.map((role, i) => (
-      <div class={`role fade-in stagger-item`} style={`--role-accent: ${accentMap[role.company] ?? 'var(--accent)'};`}>
+      <div class="role stagger-item" style={`--role-accent: ${accentMap[role.company] ?? 'var(--accent)'};`}>
         <div class="role-header">
-          <Image src={logos[role.logo]} alt={`${role.company} logo`} width={88} height={88} class="role-logo" draggable="false" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} />
+          {(() => {
+            const img = logos[role.logo];
+            if (!img) throw new Error(`Experience logo not found: "${role.logo}" — add the file to src/assets/images/`);
+            return <Image src={img} alt={`${role.company} logo`} width={88} height={88} class="role-logo" draggable="false" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} />;
+          })()}
           <div class="role-meta">
             <h3>{role.title}</h3>
             <span class="role-company">{role.company}</span>
