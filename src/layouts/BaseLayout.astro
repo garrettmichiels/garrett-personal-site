@@ -5,8 +5,8 @@ interface Props {
 }
 
 const {
-  title = 'Garrett Michiels — Software Engineer',
-  description = 'Software Engineer at Wayfair. Building high-impact systems at scale.',
+  title = 'Garrett Michiels · Software Engineer',
+  description = 'Software Engineer at Clarasight. Building high-impact systems at scale.',
 } = Astro.props;
 ---
 
@@ -22,25 +22,57 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&family=Geist:wght@300..600&family=Geist+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
 
     <title>{title}</title>
 
-    <!-- Restore theme before first paint -->
+    {/* Theme restore — disabled along with the theme switcher (see index.astro).
+        Left on, a visitor with a saved theme would be stuck in it with no way back.
     <script is:inline>
       (function () {
         var t = localStorage.getItem('gm-theme');
         if (t && t !== 'paper') document.documentElement.setAttribute('data-theme', t);
       })();
     </script>
+    */}
   </head>
   <body>
     <slot />
 
-    <!-- Stat counter animations -->
+    <!-- Motion.dev scroll + entrance animations -->
     <script>
+      import { animate, inView, stagger } from 'motion';
+
+      function reveal(els: HTMLElement[], opts: { y?: number; duration?: number; delay?: number | ((i: number) => number) }) {
+        els.forEach(el => { el.style.opacity = '0'; });
+        animate(els, { opacity: [0, 1], y: [opts.y ?? 10, 0] }, {
+          duration: opts.duration ?? 0.5,
+          delay: opts.delay ?? 0,
+          easing: [0.25, 0.46, 0.45, 0.94],
+        }).then(() => {
+          els.forEach(el => { el.style.opacity = '1'; el.style.transform = ''; });
+        });
+      }
+
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        // Hero entrance — stagger all elements in
+        const heroEls = ['.hero .mount', '.hero .eyebrow', '.hero h1', '.hero .bio', '.hero .ctas']
+          .map((sel) => document.querySelector<HTMLElement>(sel))
+          .filter((el): el is HTMLElement => el !== null);
+
+        if (heroEls.length) reveal(heroEls, { delay: stagger(0.1) });
+
+        // Role cards — stagger in when the Experience section enters view
+        inView('.roles', () => {
+          const items = [...document.querySelectorAll<HTMLElement>('.stagger-item')];
+          if (items.length) reveal(items, { y: 12, duration: 0.4, delay: stagger(0.15) });
+        }, { amount: 0.1 });
+      }
+
+      /* Stat counter animation — disabled; see highlightNumbers in Experience.astro.
+
       function animateCounter(el: HTMLElement) {
         const target   = parseInt(el.dataset.counter ?? '0', 10);
         const suffix   = el.dataset.suffix ?? '';
@@ -71,39 +103,7 @@ const {
       document.querySelectorAll<HTMLElement>('[data-counter]').forEach((el) => {
         counterObserver.observe(el);
       });
-    </script>
-
-    <!-- Motion.dev scroll + entrance animations -->
-    <script>
-      import { animate, inView, stagger } from 'motion';
-
-      function reveal(els: HTMLElement[], opts: { y?: number; duration?: number; delay?: number | ((i: number) => number) }) {
-        els.forEach(el => { el.style.opacity = '0'; });
-        animate(els, { opacity: [0, 1], y: [opts.y ?? 10, 0] }, {
-          duration: opts.duration ?? 0.5,
-          delay: opts.delay ?? 0,
-          easing: [0.25, 0.46, 0.45, 0.94],
-        }).then(() => {
-          els.forEach(el => { el.style.opacity = '1'; el.style.transform = ''; });
-        });
-      }
-
-      // Hero entrance — stagger all elements in
-      const heroEls = [
-        document.querySelector<HTMLElement>('.hero-image-wrap'),
-        document.querySelector<HTMLElement>('.hero-content .section-label-wrap'),
-        document.querySelector<HTMLElement>('.hero-content h1'),
-        document.querySelector<HTMLElement>('.hero-content .hero-bio'),
-        document.querySelector<HTMLElement>('.hero-content .hero-ctas'),
-      ].filter((el): el is HTMLElement => el !== null);
-
-      if (heroEls.length) reveal(heroEls, { delay: stagger(0.1) });
-
-      // Role cards — stagger in when the Experience section enters view
-      inView('.roles', () => {
-        const items = [...document.querySelectorAll<HTMLElement>('.stagger-item')];
-        if (items.length) reveal(items, { y: 12, duration: 0.4, delay: stagger(0.15) });
-      }, { amount: 0.1 });
+      */
     </script>
 
   </body>

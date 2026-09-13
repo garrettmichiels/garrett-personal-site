@@ -20,7 +20,7 @@
     {
       "title": "Software Engineer",
       "company": "Clarasight",
-      "date": "March 2026 — Present",
+      "date": "March 2026 – Present",
       "location": "Boston, MA",
       "logo": "clarasight.jpg",
       "details": [
@@ -32,20 +32,20 @@
     {
       "title": "Software Engineer",
       "company": "Wayfair",
-      "date": "November 2024 — March 2026",
+      "date": "November 2024 – March 2026",
       "location": "Boston, MA",
       "logo": "wayfair.jpg",
       "details": [
         "Designed an LLM-as-a-judge input classification layer for a production chatbot, reducing incorrect escalations by ~23% with real-time alerting for high-risk inputs.",
         "Architected a Kafka-based agent status tracking system processing 400k+ messages/day using Avro schemas, Spring Boot JPA, and batch processing.",
-        "Built a Composer Airflow data pipeline with dbt and Python for metadata aggregation — deduplication, continuous updates, executes in under one minute."
+        "Built a Composer Airflow data pipeline with dbt and Python for metadata aggregation, with deduplication and continuous updates, that executes in under one minute."
       ],
       "skills": ["Java", "Python", "SQL", "Airflow", "dbt", "Kafka", "Spring Boot", "GraphQL", "GCP", "LLMs"]
     },
     {
       "title": "Software Developer Intern",
       "company": "BlackBerry",
-      "date": "September — December 2023",
+      "date": "September–December 2023",
       "location": "Austin, TX",
       "logo": "blackberry.png",
       "details": [
@@ -57,12 +57,12 @@
     {
       "title": "DevOps Engineer Co-Op",
       "company": "Wellframe",
-      "date": "January — July 2022",
+      "date": "January–July 2022",
       "location": "Boston, MA",
       "logo": "wellframe.jpg",
       "details": [
         "Leveraged Kubernetes to automate database operations, reducing create/delete times by 95% and enabling concurrent SQL instance operations.",
-        "Built automated environment data population replacing a manual Postgres backup/restore process — 40 minutes down to 10."
+        "Built automated environment data population to replace a manual Postgres backup/restore process, cutting it from 40 minutes to 10."
       ],
       "skills": ["Kubernetes", "Docker", "Python", "Bash", "Helm", "GKE", "GCP"]
     }

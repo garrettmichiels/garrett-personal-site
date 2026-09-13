@@ -1,0 +1,114 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import greens from '../assets/images/prints/print-01-greens.png';
+import ochre from '../assets/images/prints/print-02-ochre.png';
+import navy from '../assets/images/prints/print-03-navy.png';
+import blue from '../assets/images/prints/print-04-blue.png';
+
+interface Crop {
+  src: ImageMetadata;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  rotate: number;
+  opacity: number;
+}
+
+// Boxes are cut to the prints' ~1.41 aspect. Keep rotations unique and
+// between 1° and 4°, and vary opacity — uniform values read as clip art.
+const leftRail: Crop[] = [
+  { src: greens, left: 14, top: 300,  width: 168, height: 119, rotate: -3.5, opacity: 0.92 },
+  { src: ochre,  left: 16, top: 980,  width: 170, height: 121, rotate: 2.5,  opacity: 0.88 },
+  { src: navy,   left: 18, top: 1760, width: 166, height: 118, rotate: -1.5, opacity: 0.85 },
+];
+
+const rightRail: Crop[] = [
+  { src: blue,   left: 34, top: 150,  width: 238, height: 169, rotate: 4,    opacity: 0.95 },
+  { src: navy,   left: 40, top: 620,  width: 244, height: 173, rotate: -2.5, opacity: 0.9 },
+  { src: greens, left: 20, top: 1200, width: 212, height: 150, rotate: 1.5,  opacity: 0.86 },
+  { src: ochre,  left: 30, top: 1820, width: 250, height: 177, rotate: -3,   opacity: 0.88 },
+];
+
+const rails = [
+  { side: 'left', crops: leftRail },
+  { side: 'right', crops: rightRail },
+];
+---
+
+{rails.map(({ side, crops }) => (
+  <div class={`rail rail-${side}`} aria-hidden="true">
+    {crops.map((c) => (
+      <div
+        class="crop"
+        style={`left:${c.left}px; top:${c.top}px; width:${c.width}px; height:${c.height}px; transform:rotate(${c.rotate}deg); opacity:${c.opacity};`}
+      >
+        <Image
+          src={c.src}
+          alt=""
+          width={c.width}
+          densities={[1, 2]}
+          loading={c.top < 700 ? 'eager' : 'lazy'}
+          draggable="false"
+        />
+      </div>
+    ))}
+  </div>
+))}
+
+<style>
+  /* Each rail is its own overflow:hidden track, positioned against the page —
+     artwork can hang past a rail edge but never widen the page. */
+  .rail {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .rail-left {
+    left: 148px;
+    width: 200px;
+  }
+
+  /* Hugs the viewport edge at 1440; on narrower screens it stays clear of the
+     content column and lets the prints run off the right edge instead. */
+  .rail-right {
+    left: max(calc(50% + 380px), calc(100% - 300px));
+    width: 300px;
+  }
+
+  .crop {
+    position: absolute;
+  }
+
+  .crop img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* The left rail sits between the fixed sidebar and the content column, so it
+     can't slide aside — drop it once the column would start to cover it. */
+  @media (max-width: 1419px) {
+    .rail-left {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1099px) {
+    .rail {
+      display: none;
+    }
+  }
+
+  @media print {
+    .rail {
+      display: none;
+    }
+  }
+</style>

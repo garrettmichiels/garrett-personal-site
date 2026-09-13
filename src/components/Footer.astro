@@ -1,86 +1,103 @@
 ---
+import { Image } from 'astro:assets';
+import boston from '../assets/images/boston.png';
+
 const currentYear = new Date().getFullYear();
 ---
 
 <footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-links">
-      <a href="mailto:garrett.michiels@gmail.com" class="footer-link">Email</a>
-      <span class="footer-sep">/</span>
-      <a href="https://github.com/garrettmichiels" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>
-      <span class="footer-sep">/</span>
-      <a href="https://www.linkedin.com/in/garrett-michiels/" target="_blank" rel="noopener noreferrer" class="footer-link">LinkedIn</a>
+  <div class="left">
+    <div class="links">
+      <a href="mailto:garrett.michiels@gmail.com">Email</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="https://github.com/garrettmichiels" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="https://www.linkedin.com/in/garrett-michiels/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </div>
-    <span class="footer-copy">
-      <span class="footer-brand" id="footer-brand">garrettmichiels.com</span>
-      &nbsp;·&nbsp; &copy;{currentYear}
-    </span>
+    <p class="copy"><span id="footer-brand">garrettmichiels.com</span> · &copy;{currentYear}</p>
+  </div>
+
+  <div class="stamp">
+    <!-- Perforated edge is baked into the PNG — don't recreate it in CSS -->
+    <Image src={boston} alt="Boston" width={176} densities={[1, 2]} loading="lazy" draggable="false" />
+    <span>boston, ma</span>
   </div>
 </footer>
 
 <style>
   .footer {
-    border-top: 1px solid var(--border-subtle);
-    padding: var(--sp-8);
-    background: var(--bg-raised);
-  }
-
-  .footer-inner {
-    max-width: var(--max-width);
-    margin: 0 auto;
     display: flex;
+    align-items: flex-end;
     justify-content: space-between;
-    align-items: center;
+    gap: 30px;
+    padding-top: 26px;
+    border-top: 1px solid var(--card-border);
   }
 
-  .footer-links {
+  .left {
     display: flex;
-    align-items: center;
-    gap: var(--sp-2);
+    flex-direction: column;
+    gap: 10px;
   }
 
-  .footer-link {
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-4);
-    transition: color 0.2s ease;
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    font-size: 0.82rem;
   }
 
-  .footer-link:hover {
-    color: var(--accent);
+  .links a {
+    color: var(--ink-link);
   }
 
-  .footer-sep {
-    color: var(--text-6);
-    font-size: 0.7rem;
+  .links a:hover {
+    color: var(--ink);
   }
 
-  .footer-brand {
+  .sep {
+    color: var(--slash);
+  }
+
+  .copy {
     font-family: var(--font-mono);
     font-size: 0.68rem;
-    font-weight: 600;
-    color: var(--ink);
-    letter-spacing: -0.01em;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-meta);
   }
 
-  .brand-dot {
-    color: var(--accent);
+  .stamp {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 7px;
   }
 
-  .footer-copy {
+  .stamp img {
+    display: block;
+    width: 176px;
+    height: auto;
+    transform: rotate(-2deg);
+  }
+
+  .stamp span {
+    padding-right: 4px;
     font-family: var(--font-mono);
-    font-size: 0.58rem;
-    letter-spacing: 0.06em;
-    color: var(--text-5);
+    font-size: 0.64rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-meta);
   }
 
   @media (max-width: 480px) {
-    .footer-inner {
-      flex-direction: column;
-      gap: var(--sp-3);
-      text-align: center;
+    .footer {
+      flex-wrap: wrap;
+    }
+
+    .stamp img {
+      width: 132px;
     }
   }
 </style>

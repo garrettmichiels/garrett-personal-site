@@ -1,31 +1,91 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Sidebar from '../components/Sidebar.astro';
+import MarginArt from '../components/MarginArt.astro';
 import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
 import Experience from '../components/Experience.astro';
 import Education from '../components/Education.astro';
 import Footer from '../components/Footer.astro';
-import ThemeSwitcher from '../components/ThemeSwitcher.astro';
+// Theme switcher disabled for a single postcard look. To bring it back,
+// uncomment this import, <ThemeSwitcher /> below, and the theme-restore
+// script in BaseLayout.astro.
+// import ThemeSwitcher from '../components/ThemeSwitcher.astro';
 ---
 
 <BaseLayout>
-  <Sidebar />
-  <main>
-    <div id="home"><Hero /></div>
-    <div id="experience"><Experience /></div>
-    <div id="education"><Education /></div>
-  </main>
-  <Footer />
-  <ThemeSwitcher />
+  <div class="page">
+    <div class="grain" aria-hidden="true"></div>
+    <MarginArt />
+    <Sidebar />
+    <div class="content">
+      <main>
+        <Hero />
+        <About />
+        <Experience />
+        <Education />
+      </main>
+      <Footer />
+    </div>
+  </div>
+  {/* <ThemeSwitcher /> */}
 </BaseLayout>
 
 <style>
-  main {
-    scroll-behavior: smooth;
+  .page {
+    position: relative;
+    min-height: 100vh;
+    /* Rails may extend past the viewport; never let them add horizontal scroll */
+    overflow-x: clip;
   }
 
-  /* Offset anchors for smooth scroll so they don't hide behind viewport top */
-  [id] {
-    scroll-margin-top: var(--sp-4);
+  .grain {
+    position: absolute;
+    inset: 0;
+    background-image: var(--grain);
+    background-size: 180px;
+    opacity: var(--grain-opacity);
+    mix-blend-mode: var(--grain-blend);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    box-sizing: content-box;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 72px 24px 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 72px;
+  }
+
+  main {
+    display: flex;
+    flex-direction: column;
+    gap: 72px;
+  }
+
+  @media (max-width: 640px) {
+    .grain {
+      background-size: 110px;
+    }
+
+    .content {
+      padding: 48px 20px 72px;
+    }
+
+    .content,
+    main {
+      gap: 56px;
+    }
+  }
+
+  @media print {
+    .grain {
+      display: none;
+    }
   }
 </style>

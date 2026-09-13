@@ -1,144 +1,136 @@
 ---
 import { Image } from 'astro:assets';
 import SectionLabel from './SectionLabel.astro';
-import Tag from './Tag.astro';
-import CalloutBox from './CalloutBox.astro';
-import RingArcs from '../art/ring-arcs.astro';
 import data from '../data/education.json';
 import seal from '../assets/images/northeastern-ring.png';
 
 const ACCENT = '#D51B2C';
 ---
 
-<section class="section">
-  <RingArcs />
-  <SectionLabel text="Education" accent={ACCENT} />
-  <h2>{data.institution}</h2>
+<section id="education" class="education">
+  <SectionLabel text="education" />
 
-  <div class="edu-layout">
-    <div class="edu-content">
-      <div class="edu-meta">
-        <span class="edu-degree">{data.degree}</span>
-        <span class="edu-college">{data.college}</span>
-        <span class="edu-date">{data.year} · {data.location}</span>
-      </div>
-
-      {data.awards.map((award) => (
-        <CalloutBox accent={ACCENT}>
-          <span class="award-label">Award</span>
-          <p class="award-text">{award}</p>
-        </CalloutBox>
-      ))}
-
-      <div class="coursework">
-        <span class="coursework-label">Relevant Coursework</span>
-        <div class="coursework-tags">
-          {data.coursework.map((course) => (
-            <Tag text={course} accent={ACCENT} />
-          ))}
+  <div class="card" style={`--edu-accent: ${ACCENT};`}>
+    <div class="body">
+      <div>
+        <h2>{data.institution}</h2>
+        <p class="college">{data.college}</p>
+        <p class="degree">{data.degree}</p>
+        <div class="meta-row">
+          <span>{data.year}</span>
+          <span class="dot"></span>
+          <span>{data.location}</span>
         </div>
       </div>
+
+      {data.awards.length > 0 && (
+        <>
+          <div class="rule"></div>
+          {data.awards.map((award) => (
+            <div class="award">
+              <span class="award-label">award</span>
+              <p>{award}</p>
+            </div>
+          ))}
+        </>
+      )}
     </div>
 
-    <div class="edu-image-wrap">
-      <Image src={seal} alt="Northeastern University" width={280} class="edu-image" draggable="false" />
-    </div>
+    <Image src={seal} alt="" width={176} class="seal" draggable="false" loading="lazy" />
   </div>
 </section>
 
 <style>
+  .education {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .card {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-left: 3px solid var(--edu-accent);
+    padding: 24px 26px;
+  }
+
+  .body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
   h2 {
+    font-size: 1.6rem;
+    line-height: 1.1;
+  }
+
+  .college {
+    margin-top: 2px;
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 1.12rem;
+    line-height: 1.3;
+    color: var(--ink-lead);
+  }
+
+  .degree {
     margin-top: 6px;
-    margin-bottom: var(--sp-5);
-  }
-
-  .edu-layout {
-    position: relative;
-  }
-
-  .edu-content {
-    max-width: 540px;
-  }
-
-  .edu-meta {
-    margin-bottom: var(--sp-5);
-  }
-
-  .edu-degree {
-    font-family: var(--font-body);
     font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--ink);
-    display: block;
-    margin-bottom: 2px;
+    line-height: 1.7;
+    color: var(--ink-body);
   }
 
-  .edu-college {
-    font-family: var(--font-body);
-    font-size: 0.84rem;
-    color: var(--text-3);
-    display: block;
-    margin-bottom: 4px;
+  .meta-row {
+    margin-top: 8px;
   }
 
-  .edu-date {
-    font-family: var(--font-mono);
-    font-size: 0.58rem;
-    letter-spacing: 0.1em;
-    color: var(--text-5);
-    text-transform: uppercase;
+  .rule {
+    height: 1px;
+    background: var(--rule-inner);
+  }
+
+  .award {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
   }
 
   .award-label {
     font-family: var(--font-mono);
-    font-size: 0.55rem;
-    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
-    color: #D51B2C;
-    display: block;
-    margin-bottom: 4px;
+    color: var(--accent);
   }
 
-  .award-text {
-    font-family: var(--font-body);
-    font-size: 0.84rem;
-    color: var(--ink-2);
+  .award p {
+    font-size: 0.95rem;
+    line-height: 1.7;
   }
 
-  .coursework {
-    margin-top: var(--sp-5);
+  /* Multiply drops the seal's white ground so it prints onto the card stock */
+  .seal {
+    flex: none;
+    width: 88px;
+    height: auto;
+    mix-blend-mode: multiply;
+    opacity: 0.9;
   }
 
-  .coursework-label {
-    font-family: var(--font-mono);
-    font-size: 0.55rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--text-5);
-    display: block;
-    margin-bottom: var(--sp-3);
-  }
+  @media (max-width: 640px) {
+    .card {
+      gap: 16px;
+      padding: 20px 18px;
+    }
 
-  .coursework-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .edu-image-wrap {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 140px;
-  }
-
-  .edu-image {
-    width: 100%;
-  }
-
-  @media (max-width: 900px) {
-    .edu-image-wrap {
-      display: none;
+    .seal {
+      width: 56px;
     }
   }
 </style>
