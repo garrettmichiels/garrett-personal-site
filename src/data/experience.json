@@ -21,8 +21,10 @@
       "title": "Software Engineer",
       "company": "Clarasight",
       "date": "March 2026 – Present",
+      "years": "2026–now",
       "location": "Boston, MA",
       "logo": "clarasight.jpg",
+      "summary": "ML flight price predictions and an AI meeting location tool.",
       "details": [
         "Deployed an ML Model for flight price predictions in AWS",
         "Implemented AI-powered meeting location suggestion tool"
@@ -33,8 +35,10 @@
       "title": "Software Engineer",
       "company": "Wayfair",
       "date": "November 2024 – March 2026",
+      "years": "2024–2026",
       "location": "Boston, MA",
       "logo": "wayfair.jpg",
+      "summary": "LLM chatbot classification that cut bad escalations ~23%, and Kafka at 400k+ messages a day.",
       "details": [
         "Designed an LLM-as-a-judge input classification layer for a production chatbot, reducing incorrect escalations by ~23% with real-time alerting for high-risk inputs.",
         "Architected a Kafka-based agent status tracking system processing 400k+ messages/day using Avro schemas, Spring Boot JPA, and batch processing.",
@@ -46,8 +50,10 @@
       "title": "Software Developer Intern",
       "company": "BlackBerry",
       "date": "September–December 2023",
+      "years": "2023",
       "location": "Austin, TX",
       "logo": "blackberry.png",
+      "summary": "High-performance bulk APIs and audit logging for Java microservices.",
       "details": [
         "Implemented high-performance API bulk operations using Spring JPA and S3, improving query processing time for two high-priority products.",
         "Integrated audit logging across a new Java microservice with Kafka pipelines to the legacy audit system."
@@ -58,8 +64,10 @@
       "title": "DevOps Engineer Co-Op",
       "company": "Wellframe",
       "date": "January–July 2022",
+      "years": "2022",
       "location": "Boston, MA",
       "logo": "wellframe.jpg",
+      "summary": "Kubernetes database automation that made create/delete 95% faster.",
       "details": [
         "Leveraged Kubernetes to automate database operations, reducing create/delete times by 95% and enabling concurrent SQL instance operations.",
         "Built automated environment data population to replace a manual Postgres backup/restore process, cutting it from 40 minutes to 10."

@@ -1,0 +1,205 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  id: string;
+  name: string;
+  role: string;
+  years: string;
+  summary: string;
+  logo: ImageMetadata;
+  accent: string;
+  eager?: boolean;
+}
+
+const { id, name, role, years, summary, logo, accent, eager = false } = Astro.props;
+---
+
+<!-- Expands in place with native <details>: no JS needed, and #id links open it -->
+<details class="entry" id={id} style={`--entry-accent: ${accent};`}>
+  <summary class="row">
+    <Image
+      src={logo}
+      alt=""
+      width={80}
+      height={80}
+      class="logo"
+      draggable="false"
+      loading={eager ? 'eager' : 'lazy'}
+    />
+    <span class="head">
+      <span class="name">{name}</span>
+      <span class="role">{role}</span>
+    </span>
+    <span class="years">{years}</span>
+    <span class="impact">{summary}</span>
+    <svg class="chevron" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+      <path d="M2 4.5 L6.5 9 L11 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+    </svg>
+  </summary>
+  <div class="detail">
+    <slot />
+  </div>
+</details>
+
+<script>
+  // Open the row a link points at (story links, shared #work-wayfair URLs),
+  // and keep the URL in sync so an open row can be shared.
+  function openTarget(id: string) {
+    const el = id ? document.getElementById(id) : null;
+    if (el instanceof HTMLDetailsElement) el.open = true;
+  }
+
+  openTarget(decodeURIComponent(location.hash.slice(1)));
+  window.addEventListener('hashchange', () => openTarget(decodeURIComponent(location.hash.slice(1))));
+
+  // hashchange doesn't fire when the hash is already current
+  document.addEventListener('click', (e) => {
+    const link = (e.target as Element).closest?.('a[href^="#"]');
+    if (link) openTarget(decodeURIComponent(link.getAttribute('href')!.slice(1)));
+  });
+
+  document.querySelectorAll<HTMLDetailsElement>('details.entry').forEach((entry) => {
+    entry.addEventListener('toggle', () => {
+      if (entry.open) {
+        history.replaceState(null, '', `#${entry.id}`);
+      } else if (location.hash === `#${entry.id}`) {
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+    });
+  });
+</script>
+
+<style>
+  .entry {
+    border-left: 3px solid transparent;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .entry[open] {
+    background: var(--card);
+    border-left-color: var(--entry-accent);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr) auto 13px;
+    grid-template-areas:
+      "logo head   years  chevron"
+      "logo impact impact impact";
+    align-items: center;
+    column-gap: 16px;
+    row-gap: 4px;
+    padding: 18px 20px 18px 17px;
+    list-style: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+
+  .row::-webkit-details-marker {
+    display: none;
+  }
+
+  .entry:not([open]) .row:hover {
+    background: var(--hover-fill);
+  }
+
+  .logo {
+    grid-area: logo;
+    align-self: start;
+    width: 40px;
+    height: 40px;
+    border-radius: 9px;
+    object-fit: contain;
+    background: var(--mount);
+    border: 1px solid var(--card-border);
+  }
+
+  .head {
+    grid-area: head;
+    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 12px;
+    row-gap: 2px;
+  }
+
+  .name {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+
+  .role {
+    font-size: 0.95rem;
+    color: var(--ink-meta);
+  }
+
+  .years {
+    grid-area: years;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    color: var(--ink-meta);
+  }
+
+  .impact {
+    grid-area: impact;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--ink-body);
+  }
+
+  .chevron {
+    grid-area: chevron;
+    color: var(--accent);
+    transition: transform 0.18s ease;
+  }
+
+  .entry[open] .chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Detail text lines up with the name column */
+  .detail {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 4px 20px 24px calc(17px + 40px + 16px);
+  }
+
+  @media (max-width: 640px) {
+    .row {
+      grid-template-columns: 36px minmax(0, 1fr) 13px;
+      grid-template-areas:
+        "logo head   chevron"
+        "logo years  years"
+        "logo impact impact";
+      column-gap: 12px;
+      padding: 16px 14px 16px 13px;
+    }
+
+    .logo {
+      width: 36px;
+      height: 36px;
+    }
+
+    .detail {
+      padding: 4px 14px 20px 13px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .entry,
+    .row,
+    .chevron {
+      transition: none;
+    }
+  }
+</style>

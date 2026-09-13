@@ -57,21 +57,21 @@ const {
       }
 
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        // Hero entrance — stagger all elements in
-        const heroEls = ['.hero .mount', '.hero .eyebrow', '.hero h1', '.hero .bio', '.hero .ctas']
+        // Intro entrance: portrait, then the story
+        const introEls = ['.intro .mount', '.intro .story']
           .map((sel) => document.querySelector<HTMLElement>(sel))
           .filter((el): el is HTMLElement => el !== null);
 
-        if (heroEls.length) reveal(heroEls, { delay: stagger(0.1) });
+        if (introEls.length) reveal(introEls, { delay: stagger(0.12) });
 
-        // Role cards — stagger in when the Experience section enters view
-        inView('.roles', () => {
-          const items = [...document.querySelectorAll<HTMLElement>('.stagger-item')];
-          if (items.length) reveal(items, { y: 12, duration: 0.4, delay: stagger(0.15) });
+        // Work rows: stagger in when the list enters view
+        inView('.work .entry-list', () => {
+          const items = [...document.querySelectorAll<HTMLElement>('.work .entry-list > li')];
+          if (items.length) reveal(items, { y: 8, duration: 0.4, delay: stagger(0.08) });
         }, { amount: 0.1 });
       }
 
-      /* Stat counter animation — disabled; see highlightNumbers in Experience.astro.
+      /* Stat counter animation — disabled; see highlightNumbers in Work.astro.
 
       function animateCounter(el: HTMLElement) {
         const target   = parseInt(el.dataset.counter ?? '0', 10);

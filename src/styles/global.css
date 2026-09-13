@@ -187,7 +187,18 @@ h1, h2, h3, h4 {
   background: var(--slash);
 }
 
-/* --- Stat counters — disabled; see highlightNumbers in Experience.astro ---
+/* --- Entry lists (Work, Education): hairline-ruled rows that expand --- */
+
+.entry-list {
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.entry-list > li + li {
+  border-top: 1px solid var(--rule);
+}
+
+/* --- Stat counters — disabled; see highlightNumbers in Work.astro ---
 
 [data-counter] {
   font-weight: 600;

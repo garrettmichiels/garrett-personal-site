@@ -1,6 +1,6 @@
 ---
-import { Image } from 'astro:assets';
 import SectionLabel from './SectionLabel.astro';
+import EntryRow from './EntryRow.astro';
 import data from '../data/education.json';
 import seal from '../assets/images/northeastern-ring.png';
 
@@ -10,34 +10,32 @@ const ACCENT = '#D51B2C';
 <section id="education" class="education">
   <SectionLabel text="education" />
 
-  <div class="card" style={`--edu-accent: ${ACCENT};`}>
-    <div class="body">
-      <div>
-        <h2>{data.institution}</h2>
-        <p class="college">{data.college}</p>
-        <p class="degree">{data.degree}</p>
+  <ul class="entry-list">
+    <li>
+      <EntryRow
+        id="education-northeastern"
+        name={data.institution}
+        role={data.degreeShort}
+        years={data.year}
+        summary={data.college}
+        logo={seal}
+        accent={ACCENT}
+      >
+        <p class="degree">{data.degree}, {data.college}</p>
         <div class="meta-row">
           <span>{data.year}</span>
           <span class="dot"></span>
           <span>{data.location}</span>
         </div>
-      </div>
-
-      {data.awards.length > 0 && (
-        <>
-          <div class="rule"></div>
-          {data.awards.map((award) => (
-            <div class="award">
-              <span class="award-label">award</span>
-              <p>{award}</p>
-            </div>
-          ))}
-        </>
-      )}
-    </div>
-
-    <Image src={seal} alt="" width={176} class="seal" draggable="false" loading="lazy" />
-  </div>
+        {data.awards.map((award) => (
+          <div class="award">
+            <span class="award-label">award</span>
+            <p>{award}</p>
+          </div>
+        ))}
+      </EntryRow>
+    </li>
+  </ul>
 </section>
 
 <style>
@@ -47,58 +45,18 @@ const ACCENT = '#D51B2C';
     gap: 18px;
   }
 
-  .card {
-    display: flex;
-    align-items: flex-start;
-    gap: 24px;
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-left: 3px solid var(--edu-accent);
-    padding: 24px 26px;
-  }
-
-  .body {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  h2 {
-    font-size: 1.6rem;
-    line-height: 1.1;
-  }
-
-  .college {
-    margin-top: 2px;
-    font-family: var(--font-heading);
-    font-style: italic;
-    font-size: 1.12rem;
-    line-height: 1.3;
-    color: var(--ink-lead);
-  }
-
   .degree {
-    margin-top: 6px;
     font-size: 0.95rem;
     line-height: 1.7;
     color: var(--ink-body);
-  }
-
-  .meta-row {
-    margin-top: 8px;
-  }
-
-  .rule {
-    height: 1px;
-    background: var(--rule-inner);
   }
 
   .award {
     display: flex;
     flex-direction: column;
     gap: 7px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule-inner);
   }
 
   .award-label {
@@ -112,25 +70,5 @@ const ACCENT = '#D51B2C';
   .award p {
     font-size: 0.95rem;
     line-height: 1.7;
-  }
-
-  /* Multiply drops the seal's white ground so it prints onto the card stock */
-  .seal {
-    flex: none;
-    width: 88px;
-    height: auto;
-    mix-blend-mode: multiply;
-    opacity: 0.9;
-  }
-
-  @media (max-width: 640px) {
-    .card {
-      gap: 16px;
-      padding: 20px 18px;
-    }
-
-    .seal {
-      width: 56px;
-    }
   }
 </style>

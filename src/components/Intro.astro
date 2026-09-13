@@ -1,0 +1,169 @@
+---
+import { Image } from 'astro:assets';
+import portrait from '../assets/images/garrett-portrait.jpeg';
+---
+
+<section id="home" class="intro">
+  <figure class="mount">
+    <Image
+      src={portrait}
+      alt="Garrett Michiels"
+      width={272}
+      height={320}
+      class="portrait"
+      id="portrait"
+      draggable="false"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <figcaption>no. 001</figcaption>
+  </figure>
+
+  <div class="story">
+    <!-- TODO(copy): first draft written from the résumé. Rewrite in your own voice before shipping. -->
+    <p>I'm a software engineer living in Boston, MA.</p>
+    <p>
+      I'm currently building the future of AI corporate travel at <a href="#work-clarasight">Clarasight</a>,
+      where I deploy ML models and work across product engineering.
+    </p>
+    <p>
+      Before Clarasight, I spent a year and a half at <a href="#work-wayfair">Wayfair</a> shipping conversational AI,
+      including a classification layer that kept a production chatbot from escalating the wrong conversations.
+    </p>
+    <p>
+      Earlier, I built Java microservices as an intern at <a href="#work-blackberry">BlackBerry</a> and automated
+      Kubernetes infrastructure as a DevOps co-op at <a href="#work-wellframe">Wellframe</a>. I studied computer
+      science at <a href="#education-northeastern">Northeastern University</a>, class of 2024.
+    </p>
+    <p>Outside of work, I make screen-printed postcards.</p>
+
+    <div class="ctas">
+      <a href="/Garrett-Michiels-resume.pdf" target="_blank" rel="noopener noreferrer" class="cta cta-primary">
+        View Resume
+      </a>
+      <a href="https://www.linkedin.com/in/garrett-michiels/" target="_blank" rel="noopener noreferrer" class="cta cta-ghost">
+        Connect
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { defineSound } from '@web-kits/audio';
+
+  const pop = defineSound({
+    source: { type: 'sine', frequency: { start: 650, end: 180 } },
+    envelope: { attack: 0, decay: 0.09 },
+    gain: 0.28,
+  });
+
+  document.getElementById('portrait')?.addEventListener('click', () => pop());
+</script>
+
+<style>
+  .intro {
+    display: flex;
+    align-items: flex-start;
+    gap: 34px;
+  }
+
+  /* Print mount: paper resting on paper, not a floating card */
+  .mount {
+    flex: none;
+    background: var(--mount);
+    padding: 13px 13px 22px;
+    box-shadow: 0 1px 0 var(--chip-border);
+  }
+
+  .portrait {
+    display: block;
+    width: 136px;
+    height: 160px;
+    object-fit: cover;
+    background: var(--photo);
+    cursor: pointer;
+  }
+
+  figcaption {
+    margin-top: 9px;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.07em;
+    color: var(--ink-meta);
+  }
+
+  .story {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .story p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--ink-body);
+    text-wrap: pretty;
+  }
+
+  .story p:first-of-type {
+    color: var(--ink);
+  }
+
+  .story a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--cta-outline);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.15s ease;
+  }
+
+  .story a:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 11px;
+    margin-top: 10px;
+  }
+
+  .story .cta {
+    padding: 10px 18px;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .story .cta-primary {
+    background: var(--cta);
+    color: var(--cta-text);
+  }
+
+  .story .cta-primary:hover {
+    background: var(--accent);
+    color: var(--cta-text);
+  }
+
+  .story .cta-ghost {
+    border: 1px solid var(--cta-outline);
+    color: var(--ink-body);
+  }
+
+  .story .cta-ghost:hover {
+    background: var(--hover-fill);
+    color: var(--ink);
+  }
+
+  @media (max-width: 640px) {
+    .intro {
+      flex-direction: column;
+      gap: 24px;
+    }
+  }
+</style>
