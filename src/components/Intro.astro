@@ -4,18 +4,21 @@ import portrait from '../assets/images/garrett-portrait.jpeg';
 ---
 
 <section id="home" class="intro">
+  <!-- Polaroid: square print, deep bottom strip. The photo develops on load; click to develop it again. -->
   <figure class="mount">
-    <Image
-      src={portrait}
-      alt="Garrett Michiels"
-      width={272}
-      height={320}
-      class="portrait"
-      id="portrait"
-      draggable="false"
-      loading="eager"
-      fetchpriority="high"
-    />
+    <div class="photo develop" id="portrait-photo">
+      <Image
+        src={portrait}
+        alt="Garrett Michiels"
+        width={288}
+        height={288}
+        class="portrait"
+        id="portrait"
+        draggable="false"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
     <figcaption>no. 001</figcaption>
   </figure>
 
@@ -49,15 +52,17 @@ import portrait from '../assets/images/garrett-portrait.jpeg';
 </section>
 
 <script>
-  import { defineSound } from '@web-kits/audio';
+  import { notification } from '../lib/sounds';
 
-  const pop = defineSound({
-    source: { type: 'sine', frequency: { start: 650, end: 180 } },
-    envelope: { attack: 0, decay: 0.09 },
-    gain: 0.28,
+  const photo = document.getElementById('portrait-photo');
+
+  photo?.addEventListener('click', () => {
+    notification();
+    // Restart the develop animation
+    photo.classList.remove('develop');
+    void photo.offsetWidth;
+    photo.classList.add('develop');
   });
-
-  document.getElementById('portrait')?.addEventListener('click', () => pop());
 </script>
 
 <style>
@@ -67,25 +72,65 @@ import portrait from '../assets/images/garrett-portrait.jpeg';
     gap: 34px;
   }
 
-  /* Print mount: paper resting on paper, not a floating card */
+  /* Polaroid proportions: thin even border, bottom strip ~4x deeper */
   .mount {
     flex: none;
+    width: 164px;
+    padding: 10px 10px 0;
     background: var(--mount);
-    padding: 13px 13px 22px;
     box-shadow: 0 1px 0 var(--chip-border);
   }
 
-  .portrait {
-    display: block;
-    width: 136px;
-    height: 160px;
-    object-fit: cover;
+  .photo {
+    position: relative;
+    overflow: hidden;
     background: var(--photo);
     cursor: pointer;
   }
 
+  .portrait {
+    display: block;
+    width: 144px;
+    height: 144px;
+    object-fit: cover;
+    object-position: 50% 35%;
+  }
+
+  /* The grey-olive film layer that clears as the print develops */
+  .photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #5f5d52;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .photo.develop .portrait {
+    animation: develop-image 3.2s cubic-bezier(0.25, 0.1, 0.25, 1) 0.5s both;
+  }
+
+  .photo.develop::after {
+    animation: develop-film 3.2s ease-out 0.5s both;
+  }
+
+  @keyframes develop-film {
+    0%   { opacity: 0.96; }
+    30%  { opacity: 0.75; }
+    65%  { opacity: 0.18; }
+    100% { opacity: 0; }
+  }
+
+  @keyframes develop-image {
+    0%   { filter: brightness(0.55) contrast(0.55) saturate(0) sepia(0.5); }
+    45%  { filter: brightness(0.8) contrast(0.75) saturate(0.35) sepia(0.35); }
+    100% { filter: none; }
+  }
+
   figcaption {
-    margin-top: 9px;
+    display: flex;
+    align-items: center;
+    height: 38px;
     font-family: var(--font-mono);
     font-size: 0.64rem;
     letter-spacing: 0.07em;
@@ -164,6 +209,13 @@ import portrait from '../assets/images/garrett-portrait.jpeg';
     .intro {
       flex-direction: column;
       gap: 24px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .photo.develop .portrait,
+    .photo.develop::after {
+      animation: none;
     }
   }
 </style>

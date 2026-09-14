@@ -44,23 +44,37 @@ const { id, name, role, years, summary, logo, accent, eager = false } = Astro.pr
 </details>
 
 <script>
+  import { drawerOpen, drawerClose } from '../lib/sounds';
+
   // Open the row a link points at (story links, shared #work-wayfair URLs),
   // and keep the URL in sync so an open row can be shared.
-  function openTarget(id: string) {
+  // Returns true when it actually opened a closed row.
+  function openTarget(id: string): boolean {
     const el = id ? document.getElementById(id) : null;
-    if (el instanceof HTMLDetailsElement) el.open = true;
+    if (el instanceof HTMLDetailsElement && !el.open) {
+      el.open = true;
+      return true;
+    }
+    return false;
   }
 
+  // Deep links on load open silently: no click yet, so no sound
   openTarget(decodeURIComponent(location.hash.slice(1)));
   window.addEventListener('hashchange', () => openTarget(decodeURIComponent(location.hash.slice(1))));
 
   // hashchange doesn't fire when the hash is already current
   document.addEventListener('click', (e) => {
     const link = (e.target as Element).closest?.('a[href^="#"]');
-    if (link) openTarget(decodeURIComponent(link.getAttribute('href')!.slice(1)));
+    if (link && openTarget(decodeURIComponent(link.getAttribute('href')!.slice(1)))) drawerOpen();
   });
 
   document.querySelectorAll<HTMLDetailsElement>('details.entry').forEach((entry) => {
+    // Summary clicks (and Enter/Space, which dispatch click) fire before the toggle
+    entry.querySelector('summary')?.addEventListener('click', () => {
+      if (entry.open) drawerClose();
+      else drawerOpen();
+    });
+
     entry.addEventListener('toggle', () => {
       if (entry.open) {
         history.replaceState(null, '', `#${entry.id}`);

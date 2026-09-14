@@ -13,22 +13,22 @@ interface Crop {
   width: number;
   height: number;
   rotate: number;
-  opacity: number;
 }
 
 // Boxes are cut to the prints' ~1.41 aspect. Keep rotations unique and
-// between 1° and 4°, and vary opacity — uniform values read as clip art.
+// between 1° and 4°; identical angles read as clip art. Prints render at full
+// opacity so the screen-print colors stay true.
 const leftRail: Crop[] = [
-  { src: greens, left: 14, top: 300,  width: 168, height: 119, rotate: -3.5, opacity: 0.92 },
-  { src: ochre,  left: 16, top: 980,  width: 170, height: 121, rotate: 2.5,  opacity: 0.88 },
-  { src: navy,   left: 18, top: 1760, width: 166, height: 118, rotate: -1.5, opacity: 0.85 },
+  { src: greens, left: 14, top: 300,  width: 168, height: 119, rotate: -3.5 },
+  { src: ochre,  left: 16, top: 980,  width: 170, height: 121, rotate: 2.5 },
+  { src: navy,   left: 18, top: 1760, width: 166, height: 118, rotate: -1.5 },
 ];
 
 const rightRail: Crop[] = [
-  { src: blue,   left: 34, top: 150,  width: 238, height: 169, rotate: 4,    opacity: 0.95 },
-  { src: navy,   left: 40, top: 620,  width: 244, height: 173, rotate: -2.5, opacity: 0.9 },
-  { src: greens, left: 20, top: 1200, width: 212, height: 150, rotate: 1.5,  opacity: 0.86 },
-  { src: ochre,  left: 30, top: 1820, width: 250, height: 177, rotate: -3,   opacity: 0.88 },
+  { src: blue,   left: 34, top: 150,  width: 238, height: 169, rotate: 4 },
+  { src: navy,   left: 40, top: 620,  width: 244, height: 173, rotate: -2.5 },
+  { src: greens, left: 20, top: 1200, width: 212, height: 150, rotate: 1.5 },
+  { src: ochre,  left: 30, top: 1820, width: 250, height: 177, rotate: -3 },
 ];
 
 const rails = [
@@ -42,7 +42,7 @@ const rails = [
     {crops.map((c) => (
       <div
         class="crop"
-        style={`left:${c.left}px; top:${c.top}px; width:${c.width}px; height:${c.height}px; transform:rotate(${c.rotate}deg); opacity:${c.opacity};`}
+        style={`left:${c.left}px; top:${c.top}px; width:${c.width}px; height:${c.height}px; transform:rotate(${c.rotate}deg);`}
       >
         <Image
           src={c.src}
