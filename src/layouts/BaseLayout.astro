@@ -2,11 +2,13 @@
 interface Props {
   title?: string;
   description?: string;
+  type?: 'website' | 'article';
 }
 
 const {
   title = 'Garrett Michiels — Software Engineer',
   description = 'Software Engineer at Wayfair. Building high-impact systems at scale.',
+  type = 'website',
 } = Astro.props;
 ---
 
@@ -16,6 +18,12 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="alternate" type="application/rss+xml" title="Garrett Michiels — Writing" href="/rss.xml" />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤓</text></svg>" />
 
     <!-- Google Fonts -->

@@ -1,0 +1,89 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import Footer from '../../components/Footer.astro';
+import ThemeSwitcher from '../../components/ThemeSwitcher.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writing', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, description, date, tags } = post.data;
+const dateStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+---
+
+<BaseLayout title={`${title} — Garrett Michiels`} description={description} type="article">
+  <Sidebar />
+  <main class="section">
+    <a href="/writing" class="back">&larr; Writing</a>
+    <article>
+      <header>
+        <time datetime={date.toISOString()}>{dateStr}</time>
+        <h1>{title}</h1>
+        {tags.length > 0 && <p class="tags">{tags.join(' / ')}</p>}
+      </header>
+      <div class="prose"><Content /></div>
+    </article>
+  </main>
+  <Footer />
+  <ThemeSwitcher />
+</BaseLayout>
+
+<style>
+  .back {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-4);
+  }
+  .back:hover { color: var(--accent-sand); }
+  header { margin: var(--sp-10) 0 var(--sp-8); }
+  header time, .tags {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-5);
+  }
+  header h1 { margin: var(--sp-3) 0; }
+
+  .prose :global(p) { font-size: 1rem; line-height: 1.8; margin-bottom: var(--sp-5); }
+  .prose :global(h2) { margin: var(--sp-10) 0 var(--sp-4); }
+  .prose :global(h3) { margin: var(--sp-8) 0 var(--sp-3); }
+  .prose :global(a) { color: var(--accent-sand); border-bottom: 1px solid var(--border-strong); }
+  .prose :global(a:hover) { border-bottom-color: var(--accent-sand); }
+  .prose :global(ul), .prose :global(ol) { margin: 0 0 var(--sp-5) var(--sp-5); color: var(--text-2); line-height: 1.8; }
+  .prose :global(ul) { list-style: disc; }
+  .prose :global(ol) { list-style: decimal; }
+  .prose :global(blockquote) {
+    border-left: 2px solid var(--accent-sand-deep);
+    padding-left: var(--sp-5);
+    margin: var(--sp-6) 0;
+    font-style: italic;
+    color: var(--text-3);
+  }
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--accent-soft);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .prose :global(pre) {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.6;
+    padding: var(--sp-4);
+    margin-bottom: var(--sp-5);
+    overflow-x: auto;
+    border-radius: 4px;
+  }
+  .prose :global(pre code) { background: none; padding: 0; }
+  .prose :global(img) { margin: var(--sp-6) 0; border-radius: 4px; }
+  .prose :global(hr) { border: 0; border-top: 1px solid var(--border-subtle); margin: var(--sp-10) 0; }
+</style>
