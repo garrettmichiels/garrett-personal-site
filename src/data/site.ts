@@ -2,7 +2,7 @@
 // from the design and must be filled in (or removed) before merging to main.
 
 export const site = {
-  currently: "[what you're working on]",
+  currently: "Building AI Enabled Dashboards at Clarasight",
 
   experience: [
     { org: 'Clarasight', role: 'Software Engineer', years: '2026 —' },

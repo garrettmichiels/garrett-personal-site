@@ -8,7 +8,7 @@ const latest = (await getPosts()).slice(0, 3);
 ---
 
 <BaseLayout>
-  <main class="page home">
+  <main id="main" class="page home">
     <header>
       <div class="name-wrap" id="name-wrap">
         <h1>Garrett Michiels<button type="button" id="dot" aria-label="Roll the ball">.</button></h1>
@@ -180,7 +180,7 @@ const latest = (await getPosts()).slice(0, 3);
         roleEl.textContent = roles[i];
         roleEl.style.opacity = '1';
       }, 450);
-    }, 2600);
+    }, 3700);
   }
 
   // Live clock (client-side so the build time isn't baked in)
@@ -230,21 +230,21 @@ const latest = (await getPosts()).slice(0, 3);
         ball.style.transform = 'scale(1)';
       }, 420);
       later(() => {
-        ball.style.transition = 'left 1.1s cubic-bezier(0.25, 0.7, 0.35, 1)';
+        ball.style.transition = 'left 2.2s cubic-bezier(0.25, 0.7, 0.35, 1)';
         ball.style.left = `${hx}px`;
       }, 470);
       later(() => {
         ball.style.transition = 'top 0.22s ease-in, transform 0.22s ease-in';
         ball.style.top = `${hy}px`;
         ball.style.transform = 'scale(0.15)';
-      }, 1600);
-      later(() => { ball.hidden = true; }, 1850);
-      later(() => { hole.style.opacity = '0'; hole.style.transform = 'translateY(8px)'; }, 2600);
+      }, 2700);
+      later(() => { ball.hidden = true; }, 2950);
+      later(() => { hole.style.opacity = '0'; hole.style.transform = 'translateY(8px)'; }, 3700);
       later(() => {
         hole.hidden = true;
         dot.style.color = '';
         rolling = false;
-      }, 3000);
+      }, 4100);
     });
   }
 </script>

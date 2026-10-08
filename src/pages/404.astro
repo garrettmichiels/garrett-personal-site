@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import Flag from '../components/Flag.astro';
+---
+
+<BaseLayout title="Out of bounds — Garrett Michiels" description="That page doesn't exist.">
+  <main id="main" class="page">
+    <SiteHeader />
+
+    <h1 class="page-title">Out of bounds<span class="dot">.</span></h1>
+    <p class="msg">That page went into the trees. Take a drop and head back to the fairway.</p>
+
+    <footer class="site-footer">
+      <a href="/" class="footer-link">← Back home</a>
+      <Flag size={16} />
+    </footer>
+  </main>
+</BaseLayout>
+
+<style>
+  .msg { color: var(--body-2); margin: 16px 0 0; }
+</style>
