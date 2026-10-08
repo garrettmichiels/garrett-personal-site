@@ -40,7 +40,7 @@ const latest = (await getPosts()).slice(0, 3);
             <span class="post-date">{formatDate(post.data.date)}</span>
           </a>
         ))}
-        <a href="/writing" class="arrow-link">All writing →</a>
+        <a href="/writing" class="arrow-link">All writing ↗</a>
       </section>
     )}
 
@@ -52,17 +52,17 @@ const latest = (await getPosts()).slice(0, 3);
           <span class="mono nowrap">{e.years}</span>
         </div>
       ))}
-      <a href="/Garrett-Michiels-resume.pdf" class="arrow-link">Full resume →</a>
+      <a href="/Garrett-Michiels-resume.pdf" class="arrow-link">Full resume ↗</a>
     </section>
 
     <section class="block">
       <h2 class="label">More</h2>
-      <p>Golf, books, and the longer version of the bio live on <a href="/more" class="green">a separate page →</a></p>
+      <p>Golf, books, and the longer version of the bio live on <a href="/more" class="green">a separate page ↗</a></p>
     </section>
 
     <section class="block">
       <h2 class="label">Connect</h2>
-      <p>Reach me by <a href="mailto:garrett.michiels@gmail.com">email</a>, or find me on <a href="https://github.com/garrettmichiels">GitHub</a> and <a href="https://www.linkedin.com/in/garrett-michiels/">LinkedIn</a>.</p>
+      <p>Reach me by <a href="mailto:michielsgarrett@gmail.com">email</a>, or find me on <a href="https://github.com/garrettmichiels">GitHub</a> and <a href="https://www.linkedin.com/in/garrett-michiels/">LinkedIn</a>.</p>
     </section>
 
     <footer class="site-footer">
@@ -70,12 +70,12 @@ const latest = (await getPosts()).slice(0, 3);
       <span id="clock"></span>
     </footer>
 
-    <p class="drive"><Flag />Still scrolling? That's a long drive.</p>
+    <p class="drive" id="drive"><Flag />Still scrolling? That's a long drive.</p>
   </main>
 </BaseLayout>
 
 <style>
-  .home { padding-top: clamp(64px, 12vw, 140px); }
+  .home { padding-top: clamp(40px, 7vw, 88px); }
 
   .name-wrap { position: relative; display: inline-block; }
   h1 {
@@ -97,7 +97,7 @@ const latest = (await getPosts()).slice(0, 3);
     color: var(--accent);
     cursor: pointer;
     vertical-align: baseline;
-    transition: color 0.3s ease;
+    transition: color 0.12s ease;
   }
 
   .hole {
@@ -150,18 +150,28 @@ const latest = (await getPosts()).slice(0, 3);
   .muted { color: var(--muted); }
   .exp { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding: 6px 0; }
   .nowrap { white-space: nowrap; }
-  .green { color: var(--accent); }
+  .green { color: var(--accent); transition: color 0.15s; }
+  .green:hover { color: var(--accent-dark); }
 
+  /* Empty space below the footer; the line fades in if you keep scrolling past it. */
   .drive {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
+    height: 160px;
+    margin: 0;
+    padding-top: 40px;
     font-family: var(--font-serif);
     font-style: italic;
     font-size: 18px;
     color: var(--muted);
-    margin: 220px 0 0;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+  .drive.shown { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    .drive { opacity: 1; transition: none; }
   }
 </style>
 
@@ -221,30 +231,72 @@ const latest = (await getPosts()).slice(0, 3);
       hole.style.transform = 'translateY(8px)';
 
       later(() => { hole.style.opacity = '1'; hole.style.transform = 'translateY(0)'; }, 40);
+      // The ball fades in where the dot was as the dot fades out
+      dot.style.color = 'transparent';
+      ball.hidden = false;
+      ball.style.transition = 'none';
+      ball.style.left = `${sx}px`;
+      ball.style.top = `${sy}px`;
+      ball.style.transform = 'scale(1)';
+      ball.style.opacity = '0';
       later(() => {
-        ball.hidden = false;
-        dot.style.color = 'transparent';
-        ball.style.transition = 'none';
-        ball.style.left = `${sx}px`;
-        ball.style.top = `${sy}px`;
-        ball.style.transform = 'scale(1)';
-      }, 420);
+        ball.style.transition = 'opacity 0.2s ease';
+        ball.style.opacity = '1';
+      }, 20);
       later(() => {
-        ball.style.transition = 'left 2.2s cubic-bezier(0.25, 0.7, 0.35, 1)';
+        ball.style.transition = 'opacity 0.2s ease, left 2.2s cubic-bezier(0.25, 0.7, 0.35, 1)';
         ball.style.left = `${hx}px`;
-      }, 470);
+      }, 150);
       later(() => {
         ball.style.transition = 'top 0.22s ease-in, transform 0.22s ease-in';
         ball.style.top = `${hy}px`;
         ball.style.transform = 'scale(0.15)';
-      }, 2700);
-      later(() => { ball.hidden = true; }, 2950);
-      later(() => { hole.style.opacity = '0'; hole.style.transform = 'translateY(8px)'; }, 3700);
+      }, 2380);
+      later(() => { ball.hidden = true; }, 2630);
+      later(() => { hole.style.opacity = '0'; hole.style.transform = 'translateY(8px)'; }, 3380);
       later(() => {
         hole.hidden = true;
         dot.style.color = '';
         rolling = false;
-      }, 4100);
+      }, 3780);
     });
+  }
+
+  // "Long drive" line: once you're at the bottom, keep scrolling and it fades in.
+  const drive = document.getElementById('drive');
+  if (drive && !reduce) {
+    const GIVE = 240; // extra scrolling needed at the bottom
+    let pull = 0;
+    let shown = false;
+    let lastWheel = 0;
+    let armed = false;
+
+    const atBottom = () =>
+      window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1;
+
+    const tug = (amount: number) => {
+      pull += amount;
+      if (pull >= GIVE) {
+        shown = true;
+        drive.classList.add('shown');
+      }
+    };
+
+    window.addEventListener('wheel', (e) => {
+      const now = performance.now();
+      // Only a gesture that starts at the bottom counts, so the momentum of
+      // the scroll that carried you here doesn't trigger it on its own.
+      if (now - lastWheel > 200) armed = atBottom();
+      lastWheel = now;
+      if (!shown && armed && e.deltaY > 0) tug(e.deltaY);
+    }, { passive: true });
+
+    let touchY = 0;
+    window.addEventListener('touchstart', (e) => { touchY = e.touches[0].clientY; }, { passive: true });
+    window.addEventListener('touchmove', (e) => {
+      const y = e.touches[0].clientY;
+      if (!shown && atBottom()) tug(touchY - y);
+      touchY = y;
+    }, { passive: true });
   }
 </script>

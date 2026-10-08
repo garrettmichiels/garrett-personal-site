@@ -5,9 +5,9 @@ export const site = {
   currently: "Building AI Enabled Dashboards at Clarasight",
 
   experience: [
-    { org: 'Clarasight', role: 'Software Engineer', years: '2026 —' },
+    { org: 'Clarasight', role: 'Software Engineer', years: '2026 — Present' },
     { org: 'Wayfair', role: 'Software Engineer', years: '2024 — 26' },
-    { org: 'BlackBerry', role: 'Intern', years: '2023' },
+    { org: 'BlackBerry', role: 'Software Developmer Intern', years: '2023' },
     { org: 'Wellframe', role: 'DevOps Co-op', years: '2022' },
   ],
 

@@ -6,6 +6,7 @@
   --body-2:  #3F4742;
   --muted:   #5B625D;
   --accent:  #3D7A5A;
+  --accent-dark: #24503A;
   --hairline: rgba(24, 32, 27, 0.12);
   --hairline-soft: rgba(24, 32, 27, 0.1);
 
@@ -75,7 +76,7 @@ button { font: inherit; color: inherit; }
   font-weight: 400;
   font-size: 44px;
   line-height: 1;
-  margin: clamp(56px, 9vw, 104px) 0 0;
+  margin: clamp(40px, 6vw, 72px) 0 0;
 }
 .page-title .dot { color: var(--accent); }
 
@@ -116,7 +117,8 @@ button { font: inherit; color: inherit; }
   white-space: nowrap;
 }
 
-.arrow-link { display: inline-block; padding: 8px 0; color: var(--accent); }
+.arrow-link { display: inline-block; padding: 8px 0; color: var(--accent); transition: color 0.15s; }
+.arrow-link:hover { color: var(--accent-dark); }
 
 /* Skip link */
 .skip-link {
