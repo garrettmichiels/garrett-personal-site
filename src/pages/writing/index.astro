@@ -2,17 +2,20 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import { getPosts, formatDate } from '../../lib/posts';
+import { site, inline } from '../../data/site';
 
 const posts = await getPosts();
 const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
+const title = site.writing?.title ?? 'Writing';
+const intro = site.writing?.intro;
 ---
 
-<BaseLayout title="Writing — Garrett Michiels" description="Notes on AI workflows, tooling, and building software for the people who use it.">
+<BaseLayout title={`${title} — ${site.name}`} description={intro ?? site.description}>
   <main id="main" class="page">
     <SiteHeader current="writing" />
 
-    <h1 class="page-title">Writing<span class="dot">.</span></h1>
-    <p class="dek">A place for my thoughts and feelings.</p>
+    <h1 class="page-title">{title}<span class="dot">.</span></h1>
+    {intro && <p class="dek" set:html={inline(intro)} />}
 
     {tags.length > 0 && (
       <div class="filters" id="filters">

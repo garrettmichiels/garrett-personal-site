@@ -1,0 +1,111 @@
+# ─────────────────────────────────────────────────────────────
+#  All the words on the site live here.
+#
+#  • Edit any text and save — the local preview updates instantly.
+#  • Hide a section: put # in front of its lines (in VS Code, select
+#    the lines and press Cmd+/ ). Remove the # to bring it back.
+#  • Links:   [link text](https://example.com)
+#  • Italics: *text*
+#  • If a line has a colon followed by a space in it, wrap it in "quotes".
+#
+#  Blog posts are separate: one Markdown file each in src/content/writing/
+# ─────────────────────────────────────────────────────────────
+
+name: Garrett Michiels
+
+# Shown in search results and link previews
+description: Software engineer at Clarasight. I build AI products and write about AI workflows and tooling.
+
+# ── Home page ────────────────────────────────────────────────
+
+home:
+  # The rotating word under your name. The last one is shown to
+  # people who turn off animations.
+  roles:
+    - Engineer.
+    - Writer.
+    - Golfer.
+    - Builder.
+    - Generalist.
+
+  tagline: Software engineer at [Clarasight](https://clarasight.com)
+
+  intro:
+    - I'm building the future of AI corporate travel at [Clarasight](https://clarasight.com), deploying ML models and doing product engineering. Before that I shipped conversational AI at Wayfair, microservices at BlackBerry, and DevOps automation at Wellframe.
+    - I studied computer science at Northeastern, and these days I am building skills in software engineering, product design, and entrepreneurship.
+
+  # Shows your 3 newest posts (only once you've published one)
+  writing: true
+
+  experience:
+    - org: Clarasight
+      role: Software Engineer
+      years: 2026 — Present
+    - org: Wayfair
+      role: Software Engineer
+      years: 2024 — 26
+    - org: BlackBerry
+      role: Software Developmer Intern
+      years: "2023"
+    - org: Wellframe
+      role: DevOps Co-op
+      years: "2022"
+
+  # The "Full resume" link under Experience (hidden if Experience is)
+  resume: /Garrett-Michiels-resume.pdf
+
+  more: Golf, books, and the longer version of the bio live on [a separate page ↗](/more)
+
+  connect: Reach me by [email](mailto:michielsgarrett@gmail.com), or find me on [GitHub](https://github.com/garrettmichiels) and [LinkedIn](https://www.linkedin.com/in/garrett-michiels/).
+
+  currently: Building AI Enabled Dashboards at Clarasight
+
+  # Appears only if someone keeps scrolling past the bottom
+  long_drive: Still scrolling? That's a long drive.
+
+# ── More page ────────────────────────────────────────────────
+
+more:
+  title: A little more
+
+  bio:
+    - I grew up in NJ, went to school in Boston, and stayed since.
+    - I started my career with my first two co-ops where I took on a DevOps and Software Developer role. I was fortunate enough to learn from some great people and make a difference on my co-ops, thus earning me the Khoury Co-Op Award.
+    - Outside of work, I'm usually on a golf course, tinkering with an idea, or hanging with friends and family. Right now I am curious about how to balance life and work, and where AI (healthily) fits into all of it.
+
+  # Shown in this order. icon can be: golf, book, screen, code, headphones
+  # (the golf one opens the putting game)
+  interests:
+    - name: Golf
+      icon: golf
+      text: I love playing, watching, and talking golf! I follow the PGA Tour quite a bit. My current goal is to break 80.
+
+    # - name: Reading
+    #   icon: book
+    #   text: "Right now: *[Book title]* by [Author]. [One line on why.]"
+
+    - name: Well-made websites
+      icon: screen
+      text: "I collect them. A few favorites: [paco.me](https://paco.me), [benji.org](https://benji.org), [rauno.me](https://rauno.me), and [ciechanow.ski](https://ciechanow.ski)."
+
+    # - name: Side projects
+    #   icon: code
+    #   text: Small tools for my own life, like a reading pipeline and a personal CRM. Mostly an excuse to try new AI workflows.
+
+    - name: Music
+      icon: headphones
+      text: I've been listening to a lot of Malcom Todd lately.
+
+  elsewhere: Find me on [LinkedIn](https://www.linkedin.com/in/garrett-michiels/), or just [say hello](mailto:michielsgarrett@gmail.com).
+
+# ── Writing page ─────────────────────────────────────────────
+
+writing:
+  title: Writing
+  intro: A place for my thoughts and feelings.
+
+# ── 404 page ─────────────────────────────────────────────────
+
+not_found:
+  title: Out of bounds
+  text: That page went into the trees. Take a drop and head back to the fairway.

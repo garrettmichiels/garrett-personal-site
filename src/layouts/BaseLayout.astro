@@ -1,4 +1,6 @@
 ---
+import { site } from '../data/site';
+
 interface Props {
   title?: string;
   description?: string;
@@ -6,8 +8,8 @@ interface Props {
 }
 
 const {
-  title = 'Garrett Michiels — Software Engineer',
-  description = 'Software engineer at Clarasight. I build AI products and write about AI workflows and tooling.',
+  title = `${site.name} — Software Engineer`,
+  description = site.description ?? '',
   type = 'website',
 } = Astro.props;
 ---

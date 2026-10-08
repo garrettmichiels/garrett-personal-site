@@ -2,16 +2,18 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Flag from '../components/Flag.astro';
 import { getPosts, formatDate } from '../lib/posts';
-import { site } from '../data/site';
+import { site, inline } from '../data/site';
 
-const latest = (await getPosts()).slice(0, 3);
+const home = site.home ?? {};
+const roles = home.roles?.length ? home.roles : [];
+const latest = home.writing ? (await getPosts()).slice(0, 3) : [];
 ---
 
 <BaseLayout>
   <main id="main" class="page home">
     <header>
       <div class="name-wrap" id="name-wrap">
-        <h1>Garrett Michiels<button type="button" id="dot" aria-label="Roll the ball">.</button></h1>
+        <h1>{site.name}<button type="button" id="dot" aria-label="Roll the ball">.</button></h1>
         <span class="hole" id="hole" aria-hidden="true" hidden>
           <span class="hole-cup"></span>
           <span class="hole-pole"></span>
@@ -19,16 +21,21 @@ const latest = (await getPosts()).slice(0, 3);
         </span>
         <span class="ball" id="ball" aria-hidden="true" hidden></span>
       </div>
-      <p class="sr-only">Engineer, writer, golfer, builder, generalist.</p>
-      <div class="role role-static" aria-hidden="true">Generalist.</div>
-      <div class="role role-anim" id="role" aria-hidden="true">Engineer.</div>
-      <div class="mono tagline">Software engineer at <a href="https://clarasight.com">Clarasight</a></div>
+      {roles.length > 0 && (
+        <>
+          <p class="sr-only">{roles.map((r) => r.replace(/\.$/, '')).join(', ')}.</p>
+          <div class="role role-static" aria-hidden="true">{roles[roles.length - 1]}</div>
+          <div class="role role-anim" id="role" aria-hidden="true" data-roles={JSON.stringify(roles)}>{roles[0]}</div>
+        </>
+      )}
+      {home.tagline && <div class="mono tagline" set:html={inline(home.tagline)} />}
     </header>
 
-    <section class="block intro">
-      <p>I'm building the future of AI corporate travel at <a href="https://clarasight.com">Clarasight</a>, deploying ML models and doing product engineering. Before that I shipped conversational AI at Wayfair, microservices at BlackBerry, and Kubernetes automation at Wellframe.</p>
-      <p>I studied computer science at Northeastern, and these days I write about AI workflows and tooling.</p>
-    </section>
+    {!!home.intro?.length && (
+      <section class="block intro">
+        {home.intro.map((p) => <p set:html={inline(p)} />)}
+      </section>
+    )}
 
     {latest.length > 0 && (
       <section class="block writing">
@@ -44,33 +51,39 @@ const latest = (await getPosts()).slice(0, 3);
       </section>
     )}
 
-    <section class="block">
-      <h2 class="label">Experience</h2>
-      {site.experience.map((e) => (
-        <div class="exp">
-          <span>{e.org} <span class="muted">· {e.role}</span></span>
-          <span class="mono nowrap">{e.years}</span>
-        </div>
-      ))}
-      <a href="/Garrett-Michiels-resume.pdf" class="arrow-link">Full resume ↗</a>
-    </section>
+    {!!home.experience?.length && (
+      <section class="block">
+        <h2 class="label">Experience</h2>
+        {home.experience.map((e) => (
+          <div class="exp">
+            <span>{e.org} <span class="muted">· {e.role}</span></span>
+            <span class="mono nowrap">{e.years}</span>
+          </div>
+        ))}
+        {home.resume && <a href={home.resume} class="arrow-link">Full resume ↗</a>}
+      </section>
+    )}
 
-    <section class="block">
-      <h2 class="label">More</h2>
-      <p>Golf, books, and the longer version of the bio live on <a href="/more" class="green">a separate page ↗</a></p>
-    </section>
+    {home.more && (
+      <section class="block more-block">
+        <h2 class="label">More</h2>
+        <p set:html={inline(home.more)} />
+      </section>
+    )}
 
-    <section class="block">
-      <h2 class="label">Connect</h2>
-      <p>Reach me by <a href="mailto:michielsgarrett@gmail.com">email</a>, or find me on <a href="https://github.com/garrettmichiels">GitHub</a> and <a href="https://www.linkedin.com/in/garrett-michiels/">LinkedIn</a>.</p>
-    </section>
+    {home.connect && (
+      <section class="block">
+        <h2 class="label">Connect</h2>
+        <p set:html={inline(home.connect)} />
+      </section>
+    )}
 
     <footer class="site-footer">
-      <span>Currently: {site.currently}</span>
+      {home.currently && <span>Currently: {home.currently}</span>}
       <span id="clock"></span>
     </footer>
 
-    <p class="drive" id="drive"><Flag />Still scrolling? That's a long drive.</p>
+    {home.long_drive && <p class="drive" id="drive"><Flag />{home.long_drive}</p>}
   </main>
 </BaseLayout>
 
@@ -136,8 +149,8 @@ const latest = (await getPosts()).slice(0, 3);
     .role-anim { display: none; }
   }
   .tagline { margin-top: 14px; }
-  .tagline a { color: var(--muted); }
-  .tagline a:hover { color: var(--accent); }
+  .tagline :global(a) { color: var(--muted); }
+  .tagline :global(a:hover) { color: var(--accent); }
 
   .block { margin-top: 48px; }
   .block p { margin: 0; }
@@ -150,8 +163,8 @@ const latest = (await getPosts()).slice(0, 3);
   .muted { color: var(--muted); }
   .exp { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding: 6px 0; }
   .nowrap { white-space: nowrap; }
-  .green { color: var(--accent); transition: color 0.15s; }
-  .green:hover { color: var(--accent-dark); }
+  .more-block :global(a) { color: var(--accent); transition: color 0.15s; }
+  .more-block :global(a:hover) { color: var(--accent-dark); }
 
   /* Empty space below the footer; the line fades in if you keep scrolling past it. */
   .drive {
@@ -159,9 +172,8 @@ const latest = (await getPosts()).slice(0, 3);
     justify-content: center;
     align-items: center;
     gap: 10px;
-    height: 160px;
-    margin: 0;
-    padding-top: 40px;
+    height: 72px;
+    margin: 8px 0 0;
     font-family: var(--font-serif);
     font-style: italic;
     font-size: 18px;
@@ -180,8 +192,8 @@ const latest = (await getPosts()).slice(0, 3);
 
   // Rotating word
   const roleEl = document.getElementById('role');
-  if (roleEl && !reduce) {
-    const roles = ['Engineer.', 'Writer.', 'Golfer.', 'Builder.', 'Generalist.'];
+  if (roleEl && !reduce && JSON.parse(roleEl.dataset.roles ?? "[]").length > 1) {
+    const roles: string[] = JSON.parse(roleEl.dataset.roles ?? '[]');
     let i = 0;
     setInterval(() => {
       roleEl.style.opacity = '0';

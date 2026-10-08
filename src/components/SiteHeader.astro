@@ -1,9 +1,11 @@
 ---
+import { site } from '../data/site';
+
 interface Props { current?: 'writing' | 'more' }
 const { current } = Astro.props;
 ---
 <header class="site-header">
-  <a href="/" class="brand">Garrett Michiels<span>.</span></a>
+  <a href="/" class="brand">{site.name}<span>.</span></a>
   <nav aria-label="Main">
     <a href="/writing" class:list={[{ current: current === 'writing' }]} aria-current={current === 'writing' ? 'page' : undefined}>Writing</a>
     <a href="/more" class:list={[{ current: current === 'more' }]} aria-current={current === 'more' ? 'page' : undefined}>More</a>

@@ -2,34 +2,40 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import Flag from '../components/Flag.astro';
-import { site } from '../data/site';
+import { site, inline } from '../data/site';
 
-const { bio, golf, reading, websites, extraInterest, elsewhere } = site.more;
+const more = site.more ?? {};
+const interests = more.interests ?? [];
+const title = more.title ?? 'A little more';
 ---
 
-<BaseLayout title="More — Garrett Michiels" description="Golf, books, and the longer version of the bio.">
+<BaseLayout title={`${title} — ${site.name}`} description="Golf, books, and the longer version of the bio.">
   <main id="main" class="page">
     <SiteHeader current="more" />
 
-    <h1 class="page-title">A little more<span class="dot">.</span></h1>
+    <h1 class="page-title">{title}<span class="dot">.</span></h1>
 
-    <section class="bio">
-      {bio.map((p) => <p>{p}</p>)}
-    </section>
+    {!!more.bio?.length && (
+      <section class="bio">
+        {more.bio.map((p) => <p set:html={inline(p)} />)}
+      </section>
+    )}
 
-    <section class="interests">
-      <h2 class="label">Interests</h2>
+    {interests.length > 0 && (
+      <section class="interests">
+        <h2 class="label">Interests</h2>
 
-      <div class="interest golf">
-        <div class="row">
-          <button type="button" id="open-putt" class="flag-btn" aria-label="Play a hole" aria-expanded="false" aria-controls="putt">
-            <Flag size={24} stroke={1.5} />
-          </button>
-          <div class="text">
-            <div class="name">Golf</div>
-            <div class="desc">{golf}</div>
-          </div>
-        </div>
+        {interests.map((it, i) => it.icon === 'golf' ? (
+          <div class:list={['interest', 'golf', { last: i === interests.length - 1 }]}>
+            <div class="row">
+              <button type="button" id="open-putt" class="flag-btn" aria-label="Play a hole" aria-expanded="false" aria-controls="putt">
+                <Flag size={28} stroke={1.15} />
+              </button>
+              <div class="text">
+                <div class="name">{it.name}</div>
+                {it.text && <div class="desc" set:html={inline(it.text)} />}
+              </div>
+            </div>
 
         <div class="putt" id="putt" hidden>
           <div class="putt-bar mono">
@@ -53,47 +59,36 @@ const { bio, golf, reading, websites, extraInterest, elsewhere } = site.more;
           <p class="mono hint" id="hint">Click where you want it to go. It rolls a little past where you click.</p>
           <p class="score" id="score" hidden aria-live="polite"></p>
         </div>
-      </div>
+          </div>
+        ) : (
+          <div class:list={['interest', { last: i === interests.length - 1 }]}>
+            {it.icon === 'book' ? (
+              <svg aria-hidden="true" class="icon" width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="#3D7A5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 7 C 10 5, 6 5, 3.5 6 L3.5 22 C 6 21, 10 21, 14 23"></path><path d="M14 7 C 18 5, 22 5, 24.5 6 L24.5 22 C 22 21, 18 21, 14 23"></path><path d="M14 7 L14 23"></path></svg>
+            ) : it.icon === 'screen' ? (
+              <svg aria-hidden="true" class="icon" width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="#3D7A5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="21" height="16" rx="2"></rect><path d="M3.5 9.5 L24.5 9.5"></path><path d="M10 24 L18 24"></path></svg>
+            ) : it.icon === 'code' ? (
+              <svg aria-hidden="true" class="icon" width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="#3D7A5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 7 L4 14 L10 21"></path><path d="M18 7 L24 14 L18 21"></path><path d="M15.5 5.5 L12.5 22.5"></path></svg>
+            ) : it.icon === 'headphones' ? (
+              // Headphones icon from Tabler Icons (MIT)
+              <svg aria-hidden="true" class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3D7A5A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15a2 2 0 0 1 2 -2h1a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-1a2 2 0 0 1 -2 -2l0 -3"></path><path d="M15 15a2 2 0 0 1 2 -2h1a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-1a2 2 0 0 1 -2 -2l0 -3"></path><path d="M4 15v-3a8 8 0 0 1 16 0v3"></path></svg>
+            ) : (
+              <span class="icon" aria-hidden="true"></span>
+            )}
+            <div>
+              <div class="name">{it.name}</div>
+              {it.text && <div class="desc" set:html={inline(it.text)} />}
+            </div>
+          </div>
+        ))}
+      </section>
+    )}
 
-      <div class="interest">
-        <svg aria-hidden="true" class="icon" width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="#3D7A5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 7 C 10 5, 6 5, 3.5 6 L3.5 22 C 6 21, 10 21, 14 23"></path><path d="M14 7 C 18 5, 22 5, 24.5 6 L24.5 22 C 22 21, 18 21, 14 23"></path><path d="M14 7 L14 23"></path></svg>
-        <div>
-          <div class="name">Reading</div>
-          <div class="desc">Right now: <em>{reading.title}</em> by {reading.author}. {reading.why}</div>
-        </div>
-      </div>
-
-      <div class="interest">
-        <svg aria-hidden="true" class="icon" width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="#3D7A5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="21" height="16" rx="2"></rect><path d="M3.5 9.5 L24.5 9.5"></path><path d="M10 24 L18 24"></path></svg>
-        <div>
-          <div class="name">Well-made websites</div>
-          <div class="desc">I collect them. A few favorites: {websites.map((w, i) => (
-            <><a href={w.href}>{w.label}</a>{i < websites.length - 2 ? ', ' : i === websites.length - 2 ? ', and ' : '.'}</>
-          ))}</div>
-        </div>
-      </div>
-
-      <div class="interest">
-        <svg aria-hidden="true" class="icon" width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="#3D7A5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 7 L4 14 L10 21"></path><path d="M18 7 L24 14 L18 21"></path><path d="M15.5 5.5 L12.5 22.5"></path></svg>
-        <div>
-          <div class="name">Side projects</div>
-          <div class="desc">Small tools for my own life, like a reading pipeline and a personal CRM. Mostly an excuse to try new AI workflows.</div>
-        </div>
-      </div>
-
-      <div class="interest last">
-        <svg aria-hidden="true" class="icon" width="24" height="24" viewBox="0 0 28 28" fill="none" stroke="#3D7A5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="14" r="10"></circle><path d="M14 8 L14 14 L18 16.5"></path></svg>
-        <div>
-          <div class="name">{extraInterest.title}</div>
-          <div class="desc">{extraInterest.blurb}</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="elsewhere">
-      <h2 class="label">Elsewhere</h2>
-      <p>{elsewhere} Or just <a href="mailto:michielsgarrett@gmail.com">say hello</a>.</p>
-    </section>
+    {more.elsewhere && (
+      <section class="elsewhere">
+        <h2 class="label">Elsewhere</h2>
+        <p set:html={inline(more.elsewhere)} />
+      </section>
+    )}
 
     <footer class="site-footer">
       <a href="/" class="footer-link">← Back home</a>
@@ -118,11 +113,11 @@ const { bio, golf, reading, websites, extraInterest, elsewhere } = site.more;
   .name { font-weight: 500; }
   .desc { color: var(--body-2); }
 
-  .row { display: flex; gap: 16px; }
+  .row { display: flex; gap: 10px; }
   .flag-btn {
     flex: 0 0 44px;
     width: 44px; height: 44px;
-    margin: -2px 0 0 -10px;
+    margin: 0 0 0 -10px;
     padding: 0;
     border: 0;
     background: none;
@@ -160,94 +155,99 @@ const { bio, golf, reading, websites, extraInterest, elsewhere } = site.more;
 </style>
 
 <script>
-  const putt = document.getElementById('putt')!;
-  const openBtn = document.getElementById('open-putt')!;
-  const green = document.getElementById('green')!;
-  const ballEl = document.getElementById('putt-ball')!;
-  const strokesEl = document.getElementById('strokes')!;
-  const hint = document.getElementById('hint')!;
-  const score = document.getElementById('score')!;
+  // The putting game only exists when the golf interest is shown
+  if (document.getElementById('putt')) initPutt();
 
-  const START = { x: 0.14, y: 0.58 };
-  const CUP = { x: 0.8, y: 0.46 };
-  const names: Record<number, string> = { 1: 'Hole in one', 2: 'Birdie', 3: 'Par', 4: 'Bogey', 5: 'Double bogey' };
+  function initPutt() {
+    const putt = document.getElementById('putt')!;
+    const openBtn = document.getElementById('open-putt')!;
+    const green = document.getElementById('green')!;
+    const ballEl = document.getElementById('putt-ball')!;
+    const strokesEl = document.getElementById('strokes')!;
+    const hint = document.getElementById('hint')!;
+    const score = document.getElementById('score')!;
 
-  let pos = { ...START };
-  let vx = 0, vy = 0, strokes = 0;
-  let moving = false, sunk = false;
-  let raf: number | null = null;
+    const START = { x: 0.14, y: 0.58 };
+    const CUP = { x: 0.8, y: 0.46 };
+    const names: Record<number, string> = { 1: 'Hole in one', 2: 'Birdie', 3: 'Par', 4: 'Bogey', 5: 'Double bogey' };
 
-  const draw = () => {
-    ballEl.style.left = `${(pos.x * 100).toFixed(2)}%`;
-    ballEl.style.top = `${(pos.y * 100).toFixed(2)}%`;
-  };
-  const stop = () => { if (raf) cancelAnimationFrame(raf); raf = null; };
+    let pos = { ...START };
+    let vx = 0, vy = 0, strokes = 0;
+    let moving = false, sunk = false;
+    let raf: number | null = null;
 
-  function open() {
-    stop();
-    pos = { ...START };
-    vx = 0; vy = 0; strokes = 0; moving = false; sunk = false;
-    strokesEl.textContent = '0';
-    ballEl.hidden = false;
-    hint.hidden = false;
-    score.hidden = true;
-    putt.hidden = false;
-    openBtn.setAttribute('aria-expanded', 'true');
-    draw();
-  }
-  function close() {
-    stop();
-    putt.hidden = true;
-    openBtn.setAttribute('aria-expanded', 'false');
-    openBtn.focus();
-  }
+    const draw = () => {
+      ballEl.style.left = `${(pos.x * 100).toFixed(2)}%`;
+      ballEl.style.top = `${(pos.y * 100).toFixed(2)}%`;
+    };
+    const stop = () => { if (raf) cancelAnimationFrame(raf); raf = null; };
 
-  function shootAt(e: MouseEvent) {
-    if (moving || sunk) return;
-    const rect = green.getBoundingClientRect();
-    // Keyboard activation arrives with no pointer position: aim at the cup.
-    const tx = e.detail === 0 ? rect.left + CUP.x * rect.width : e.clientX;
-    const ty = e.detail === 0 ? rect.top + CUP.y * rect.height : e.clientY;
-    const bx = pos.x * rect.width, by = pos.y * rect.height;
-    const dx = (tx - rect.left) - bx, dy = (ty - rect.top) - by;
-    const d = Math.hypot(dx, dy);
-    if (d < 4) return;
-    const v = Math.min(d * 0.04, 24);
-    vx = (dx / d) * v; vy = (dy / d) * v;
-    strokes += 1;
-    strokesEl.textContent = String(strokes);
-    moving = true;
-    raf = requestAnimationFrame(step);
-  }
-
-  function step() {
-    const w = green.clientWidth, h = green.clientHeight, r = 7;
-    let x = pos.x * w + vx, y = pos.y * h + vy;
-    if (x < r) { x = r; vx = Math.abs(vx) * 0.6; }
-    if (x > w - r) { x = w - r; vx = -Math.abs(vx) * 0.6; }
-    if (y < r) { y = r; vy = Math.abs(vy) * 0.6; }
-    if (y > h - r) { y = h - r; vy = -Math.abs(vy) * 0.6; }
-    const cx = CUP.x * w, cy = CUP.y * h;
-    const dist = Math.hypot(x - cx, y - cy);
-    const speed = Math.hypot(vx, vy);
-    if (dist < 9 && speed < 6) {
-      pos = { ...CUP };
-      raf = null; moving = false; sunk = true;
-      ballEl.hidden = true;
-      hint.hidden = true;
-      score.textContent = `${names[strokes] ?? '+' + (strokes - 3)}.`;
-      score.hidden = false;
-      return;
+    function open() {
+      stop();
+      pos = { ...START };
+      vx = 0; vy = 0; strokes = 0; moving = false; sunk = false;
+      strokesEl.textContent = '0';
+      ballEl.hidden = false;
+      hint.hidden = false;
+      score.hidden = true;
+      putt.hidden = false;
+      openBtn.setAttribute('aria-expanded', 'true');
+      draw();
     }
-    vx *= 0.965; vy *= 0.965;
-    pos = { x: x / w, y: y / h };
-    draw();
-    if (speed < 0.15) { raf = null; moving = false; return; }
-    raf = requestAnimationFrame(step);
-  }
+    function close() {
+      stop();
+      putt.hidden = true;
+      openBtn.setAttribute('aria-expanded', 'false');
+      openBtn.focus();
+    }
 
-  openBtn.addEventListener('click', open);
-  document.getElementById('reset')!.addEventListener('click', open);
-  document.getElementById('close')!.addEventListener('click', close);
-  green.addEventListener('click', shootAt);
+    function shootAt(e: MouseEvent) {
+      if (moving || sunk) return;
+      const rect = green.getBoundingClientRect();
+      // Keyboard activation arrives with no pointer position: aim at the cup.
+      const tx = e.detail === 0 ? rect.left + CUP.x * rect.width : e.clientX;
+      const ty = e.detail === 0 ? rect.top + CUP.y * rect.height : e.clientY;
+      const bx = pos.x * rect.width, by = pos.y * rect.height;
+      const dx = (tx - rect.left) - bx, dy = (ty - rect.top) - by;
+      const d = Math.hypot(dx, dy);
+      if (d < 4) return;
+      const v = Math.min(d * 0.04, 24);
+      vx = (dx / d) * v; vy = (dy / d) * v;
+      strokes += 1;
+      strokesEl.textContent = String(strokes);
+      moving = true;
+      raf = requestAnimationFrame(step);
+    }
+
+    function step() {
+      const w = green.clientWidth, h = green.clientHeight, r = 7;
+      let x = pos.x * w + vx, y = pos.y * h + vy;
+      if (x < r) { x = r; vx = Math.abs(vx) * 0.6; }
+      if (x > w - r) { x = w - r; vx = -Math.abs(vx) * 0.6; }
+      if (y < r) { y = r; vy = Math.abs(vy) * 0.6; }
+      if (y > h - r) { y = h - r; vy = -Math.abs(vy) * 0.6; }
+      const cx = CUP.x * w, cy = CUP.y * h;
+      const dist = Math.hypot(x - cx, y - cy);
+      const speed = Math.hypot(vx, vy);
+      if (dist < 9 && speed < 6) {
+        pos = { ...CUP };
+        raf = null; moving = false; sunk = true;
+        ballEl.hidden = true;
+        hint.hidden = true;
+        score.textContent = `${names[strokes] ?? '+' + (strokes - 3)}.`;
+        score.hidden = false;
+        return;
+      }
+      vx *= 0.965; vy *= 0.965;
+      pos = { x: x / w, y: y / h };
+      draw();
+      if (speed < 0.15) { raf = null; moving = false; return; }
+      raf = requestAnimationFrame(step);
+    }
+
+    openBtn.addEventListener('click', open);
+    document.getElementById('reset')!.addEventListener('click', open);
+    document.getElementById('close')!.addEventListener('click', close);
+    green.addEventListener('click', shootAt);
+  }
 </script>
