@@ -45,13 +45,6 @@ const latest = (await getPosts()).slice(0, 3);
     )}
 
     <section class="block">
-      <h2 class="label">Building</h2>
-      {site.building.map((b) => (
-        <div class="item"><div>{b.name}</div><div class="muted">{b.blurb}</div></div>
-      ))}
-    </section>
-
-    <section class="block">
       <h2 class="label">Experience</h2>
       {site.experience.map((e) => (
         <div class="exp">
@@ -154,7 +147,6 @@ const latest = (await getPosts()).slice(0, 3);
 
   .home-row { padding: 8px 0; }
   .grow { flex: 1; }
-  .item { padding: 8px 0; }
   .muted { color: var(--muted); }
   .exp { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding: 6px 0; }
   .nowrap { white-space: nowrap; }
