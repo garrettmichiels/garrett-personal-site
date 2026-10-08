@@ -1,31 +1,258 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Sidebar from '../components/Sidebar.astro';
-import Hero from '../components/Hero.astro';
-import Experience from '../components/Experience.astro';
-import Education from '../components/Education.astro';
-import Footer from '../components/Footer.astro';
-import ThemeSwitcher from '../components/ThemeSwitcher.astro';
+import Flag from '../components/Flag.astro';
+import { getPosts, formatDate } from '../lib/posts';
+import { site } from '../data/site';
+
+const latest = (await getPosts()).slice(0, 3);
 ---
 
 <BaseLayout>
-  <Sidebar />
-  <main>
-    <div id="home"><Hero /></div>
-    <div id="experience"><Experience /></div>
-    <div id="education"><Education /></div>
+  <main class="page home">
+    <header>
+      <div class="name-wrap" id="name-wrap">
+        <h1>Garrett Michiels<button type="button" id="dot" aria-label="Roll the ball">.</button></h1>
+        <span class="hole" id="hole" aria-hidden="true" hidden>
+          <span class="hole-cup"></span>
+          <span class="hole-pole"></span>
+          <span class="hole-flag"></span>
+        </span>
+        <span class="ball" id="ball" aria-hidden="true" hidden></span>
+      </div>
+      <p class="sr-only">Engineer, writer, golfer, builder, generalist.</p>
+      <div class="role role-static" aria-hidden="true">Generalist.</div>
+      <div class="role role-anim" id="role" aria-hidden="true">Engineer.</div>
+      <div class="mono tagline">Software engineer at <a href="https://clarasight.com">Clarasight</a></div>
+    </header>
+
+    <section class="block intro">
+      <p>I'm building the future of AI corporate travel at <a href="https://clarasight.com">Clarasight</a>, deploying ML models and doing product engineering. Before that I shipped conversational AI at Wayfair, microservices at BlackBerry, and Kubernetes automation at Wellframe.</p>
+      <p>I studied computer science at Northeastern, and these days I write about AI workflows and tooling.</p>
+    </section>
+
+    {latest.length > 0 && (
+      <section class="block writing">
+        <h2 class="label">Writing</h2>
+        {latest.map((post) => (
+          <a href={`/writing/${post.id}/`} class="post-row home-row">
+            <span class="num">№ {post.num}</span>
+            <span class="post-title grow">{post.data.title}</span>
+            <span class="post-date">{formatDate(post.data.date)}</span>
+          </a>
+        ))}
+        <a href="/writing" class="arrow-link">All writing →</a>
+      </section>
+    )}
+
+    <section class="block">
+      <h2 class="label">Building</h2>
+      {site.building.map((b) => (
+        <div class="item"><div>{b.name}</div><div class="muted">{b.blurb}</div></div>
+      ))}
+    </section>
+
+    <section class="block">
+      <h2 class="label">Experience</h2>
+      {site.experience.map((e) => (
+        <div class="exp">
+          <span>{e.org} <span class="muted">· {e.role}</span></span>
+          <span class="mono nowrap">{e.years}</span>
+        </div>
+      ))}
+      <a href="/Garrett-Michiels-resume.pdf" class="arrow-link">Full resume →</a>
+    </section>
+
+    <section class="block">
+      <h2 class="label">More</h2>
+      <p>Golf, books, and the longer version of the bio live on <a href="/more" class="green">a separate page →</a></p>
+    </section>
+
+    <section class="block">
+      <h2 class="label">Connect</h2>
+      <p>Reach me by <a href="mailto:garrett.michiels@gmail.com">email</a>, or find me on <a href="https://github.com/garrettmichiels">GitHub</a> and <a href="https://www.linkedin.com/in/garrett-michiels/">LinkedIn</a>.</p>
+    </section>
+
+    <footer class="site-footer">
+      <span>Currently: {site.currently}</span>
+      <span id="clock"></span>
+    </footer>
+
+    <p class="drive"><Flag />Still scrolling? That's a long drive.</p>
   </main>
-  <Footer />
-  <ThemeSwitcher />
 </BaseLayout>
 
 <style>
-  main {
-    scroll-behavior: smooth;
+  .home { padding-top: clamp(64px, 12vw, 140px); }
+
+  .name-wrap { position: relative; display: inline-block; }
+  h1 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  #dot {
+    background: none;
+    border: 0;
+    padding: 0 4px 0 0;
+    margin: 0;
+    min-height: 44px;
+    font: inherit;
+    line-height: 1;
+    color: var(--accent);
+    cursor: pointer;
+    vertical-align: baseline;
+    transition: color 0.3s ease;
   }
 
-  /* Offset anchors for smooth scroll so they don't hide behind viewport top */
-  [id] {
-    scroll-margin-top: var(--sp-4);
+  .hole {
+    position: absolute;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .hole[hidden], .ball[hidden] { display: none; }
+  .hole-cup { position: absolute; left: -8px; top: -3px; width: 16px; height: 6px; border-radius: 50%; background: var(--ink); }
+  .hole-pole { position: absolute; left: -0.75px; top: -32px; width: 1.5px; height: 32px; background: var(--ink); }
+  .hole-flag { position: absolute; left: 0.75px; top: -32px; width: 0; height: 0; border-left: 14px solid var(--accent); border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+  .ball {
+    position: absolute;
+    width: 10px; height: 10px;
+    margin: -5px 0 0 -5px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--ink);
+    pointer-events: none;
+  }
+
+  .role {
+    font-family: var(--font-serif);
+    font-size: 28px;
+    line-height: 1.2;
+    margin-top: 8px;
+    color: var(--accent);
+    font-style: italic;
+    transition: opacity 0.45s ease;
+  }
+  .role-static { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .role-static { display: block; }
+    .role-anim { display: none; }
+  }
+  .tagline { margin-top: 14px; }
+  .tagline a { color: var(--muted); }
+  .tagline a:hover { color: var(--accent); }
+
+  .block { margin-top: 48px; }
+  .block p { margin: 0; }
+  .block.intro p { margin: 0 0 16px; }
+  .block.intro p:last-child { margin: 0; }
+  .writing { margin-top: 56px; }
+
+  .home-row { padding: 8px 0; }
+  .grow { flex: 1; }
+  .item { padding: 8px 0; }
+  .muted { color: var(--muted); }
+  .exp { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding: 6px 0; }
+  .nowrap { white-space: nowrap; }
+  .green { color: var(--accent); }
+
+  .drive {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--muted);
+    margin: 220px 0 0;
   }
 </style>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Rotating word
+  const roleEl = document.getElementById('role');
+  if (roleEl && !reduce) {
+    const roles = ['Engineer.', 'Writer.', 'Golfer.', 'Builder.', 'Generalist.'];
+    let i = 0;
+    setInterval(() => {
+      roleEl.style.opacity = '0';
+      setTimeout(() => {
+        i = (i + 1) % roles.length;
+        roleEl.textContent = roles[i];
+        roleEl.style.opacity = '1';
+      }, 450);
+    }, 2600);
+  }
+
+  // Live clock (client-side so the build time isn't baked in)
+  const clockEl = document.getElementById('clock');
+  if (clockEl) {
+    const tick = () => {
+      const t = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' });
+      clockEl.textContent = `${t} ET`;
+    };
+    tick();
+    setInterval(tick, 20000);
+  }
+
+  // Rolling-ball easter egg
+  const wrap = document.getElementById('name-wrap');
+  const dot = document.getElementById('dot');
+  const hole = document.getElementById('hole');
+  const ball = document.getElementById('ball');
+  let rolling = false;
+
+  if (wrap && dot && hole && ball && !reduce) {
+    const later = (fn: () => void, ms: number) => setTimeout(fn, ms);
+    dot.addEventListener('click', () => {
+      if (rolling) return;
+      rolling = true;
+      const w = wrap.getBoundingClientRect();
+      const d = dot.getBoundingClientRect();
+      const sx = d.left - w.left + (d.width - 4) / 2;
+      const base = d.bottom - w.top - d.height * 0.22;
+      const hx = w.width + 64;
+      const hy = base + 1;
+      const sy = base - 5;
+
+      hole.hidden = false;
+      hole.style.left = `${hx}px`;
+      hole.style.top = `${hy}px`;
+      hole.style.opacity = '0';
+      hole.style.transform = 'translateY(8px)';
+
+      later(() => { hole.style.opacity = '1'; hole.style.transform = 'translateY(0)'; }, 40);
+      later(() => {
+        ball.hidden = false;
+        dot.style.color = 'transparent';
+        ball.style.transition = 'none';
+        ball.style.left = `${sx}px`;
+        ball.style.top = `${sy}px`;
+        ball.style.transform = 'scale(1)';
+      }, 420);
+      later(() => {
+        ball.style.transition = 'left 1.1s cubic-bezier(0.25, 0.7, 0.35, 1)';
+        ball.style.left = `${hx}px`;
+      }, 470);
+      later(() => {
+        ball.style.transition = 'top 0.22s ease-in, transform 0.22s ease-in';
+        ball.style.top = `${hy}px`;
+        ball.style.transform = 'scale(0.15)';
+      }, 1600);
+      later(() => { ball.hidden = true; }, 1850);
+      later(() => { hole.style.opacity = '0'; hole.style.transform = 'translateY(8px)'; }, 2600);
+      later(() => {
+        hole.hidden = true;
+        dot.style.color = '';
+        rolling = false;
+      }, 3000);
+    });
+  }
+</script>

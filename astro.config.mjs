@@ -5,4 +5,7 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://garrettmichiels.com',
   integrations: [sitemap()],
+  markdown: {
+    shikiConfig: { theme: 'github-dark' },
+  },
 });

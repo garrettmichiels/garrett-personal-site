@@ -1,89 +1,86 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Sidebar from '../../components/Sidebar.astro';
-import Footer from '../../components/Footer.astro';
-import ThemeSwitcher from '../../components/ThemeSwitcher.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import { getPosts, formatDate } from '../../lib/posts';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('writing', ({ data }) => !data.draft);
+  const posts = await getPosts();
   return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
 }
 
 const { post } = Astro.props;
 const { Content } = await render(post);
 const { title, description, date, tags } = post.data;
-const dateStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const meta = [formatDate(date), tags[0], `${post.minutes} min read`].filter(Boolean);
 ---
 
 <BaseLayout title={`${title} — Garrett Michiels`} description={description} type="article">
-  <Sidebar />
-  <main class="section">
-    <a href="/writing" class="back">&larr; Writing</a>
+  <main class="page">
+    <SiteHeader current="writing" />
+
     <article>
-      <header>
-        <time datetime={date.toISOString()}>{dateStr}</time>
-        <h1>{title}</h1>
-        {tags.length > 0 && <p class="tags">{tags.join(' / ')}</p>}
-      </header>
+      <div class="meta mono"><span class="num">№ {post.num}</span>{meta.map((m) => <> · {m}</>)}</div>
+      <h1>{title}</h1>
+      <p class="summary">{description}</p>
+      <div class="rule"></div>
       <div class="prose"><Content /></div>
     </article>
+
+    <footer class="site-footer">
+      <a href="/writing" class="footer-link">← All writing</a>
+      {post.next && (
+        <a href={`/writing/${post.next.id}/`} class="footer-link next">Next: <span class="num">№ {post.next.num}</span> {post.next.data.title} →</a>
+      )}
+    </footer>
   </main>
-  <Footer />
-  <ThemeSwitcher />
 </BaseLayout>
 
 <style>
-  .back {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-4);
+  article { margin-top: clamp(56px, 9vw, 104px); }
+  h1 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(40px, 6vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 16px 0 0;
   }
-  .back:hover { color: var(--accent-sand); }
-  header { margin: var(--sp-10) 0 var(--sp-8); }
-  header time, .tags {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-5);
-  }
-  header h1 { margin: var(--sp-3) 0; }
+  .summary { font-size: 19px; line-height: 1.55; color: var(--body-2); margin: 20px 0 0; }
+  .rule { height: 1px; background: var(--hairline); margin: 48px 0; }
+  .next { color: var(--ink); }
 
-  .prose :global(p) { font-size: 1rem; line-height: 1.8; margin-bottom: var(--sp-5); }
-  .prose :global(h2) { margin: var(--sp-10) 0 var(--sp-4); }
-  .prose :global(h3) { margin: var(--sp-8) 0 var(--sp-3); }
-  .prose :global(a) { color: var(--accent-sand); border-bottom: 1px solid var(--border-strong); }
-  .prose :global(a:hover) { border-bottom-color: var(--accent-sand); }
-  .prose :global(ul), .prose :global(ol) { margin: 0 0 var(--sp-5) var(--sp-5); color: var(--text-2); line-height: 1.8; }
+  .prose :global(p) { font-size: 18px; line-height: 1.75; margin: 0 0 24px; }
+  .prose :global(h2) { font-family: var(--font-serif); font-weight: 400; font-size: 30px; line-height: 1.2; margin: 48px 0 12px; }
+  .prose :global(h3) { font-family: var(--font-serif); font-weight: 400; font-size: 24px; line-height: 1.25; margin: 36px 0 10px; }
+  .prose :global(a) { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hairline); }
+  .prose :global(a:hover) { text-decoration-color: currentColor; }
+  .prose :global(ul), .prose :global(ol) { font-size: 18px; line-height: 1.75; margin: 0 0 24px; padding-left: 24px; }
   .prose :global(ul) { list-style: disc; }
   .prose :global(ol) { list-style: decimal; }
   .prose :global(blockquote) {
-    border-left: 2px solid var(--accent-sand-deep);
-    padding-left: var(--sp-5);
-    margin: var(--sp-6) 0;
+    margin: 40px 0;
+    padding: 0;
+    font-family: var(--font-serif);
     font-style: italic;
-    color: var(--text-3);
+    font-size: 26px;
+    line-height: 1.35;
+    color: var(--accent);
   }
-  .prose :global(code) {
-    font-family: var(--font-mono);
-    font-size: 0.85em;
-    background: var(--accent-soft);
-    padding: 1px 5px;
-    border-radius: 3px;
-  }
+  .prose :global(blockquote p) { font-size: inherit; line-height: inherit; margin: 0; }
+  .prose :global(code) { font-family: var(--font-mono); font-size: 0.85em; background: rgba(24,32,27,0.06); padding: 1px 5px; border-radius: 4px; }
   .prose :global(pre) {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    line-height: 1.6;
-    padding: var(--sp-4);
-    margin-bottom: var(--sp-5);
+    background-color: var(--ink) !important;
+    color: #E6ECE7;
+    border-radius: 10px;
+    padding: 20px 24px;
     overflow-x: auto;
-    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.7;
+    margin: 0 0 24px;
   }
-  .prose :global(pre code) { background: none; padding: 0; }
-  .prose :global(img) { margin: var(--sp-6) 0; border-radius: 4px; }
-  .prose :global(hr) { border: 0; border-top: 1px solid var(--border-subtle); margin: var(--sp-10) 0; }
+  .prose :global(pre code) { background: none; padding: 0; font-size: inherit; }
+  .prose :global(img) { max-width: 100%; height: auto; border-radius: 6px; margin: 8px 0 24px; }
+  .prose :global(hr) { border: 0; border-top: 1px solid var(--hairline); margin: 48px 0; }
 </style>

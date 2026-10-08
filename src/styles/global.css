@@ -1,265 +1,119 @@
-/* ============================================
-   Light Editorial Design System
-   Fun. Technical. With Gravitas.
-   ============================================ */
-
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* --- Custom Properties --- */
+/* Quiet editorial — design tokens and shared primitives */
 
 :root {
-  /* Green palette */
-  --green:       #3D7A5A;
-  --green-light: #EAF3EE;
-  --green-muted: #C2D9CC;
-  --green-deep:  #255240;
+  --paper:   #F5F4EF;
+  --ink:     #18201B;
+  --body-2:  #3F4742;
+  --muted:   #5B625D;
+  --accent:  #3D7A5A;
+  --hairline: rgba(24, 32, 27, 0.12);
+  --hairline-soft: rgba(24, 32, 27, 0.1);
 
-  /* Neutral palette */
-  --ink:   #141410;
-  --ink-2: #3A3A34;
-  --ink-3: #7A7A70;
-  --ink-4: #B8B8B0;
-  --paper: #F8F7F3;
-  --white: #FFFFFF;
-
-  /* Amber accent */
-  --amber:       #C8822A;
-  --amber-light: #FDF3E3;
-  --amber-deep:  #A06820;
-
-  /* Semantic tokens — keep old names so components don't break */
-  --bg-base:   var(--paper);
-  --bg-raised: var(--white);
-  --bg-hover:  var(--green-light);
-
-  --text-1: var(--ink);
-  --text-2: var(--ink-2);
-  --text-3: var(--ink-3);
-  --text-4: var(--ink-4);
-  --text-5: #9A9A90;
-  --text-6: #C0C0B8;
-
-  --border-strong:  rgba(0,0,0,0.12);
-  --border-medium:  rgba(0,0,0,0.08);
-  --border-subtle:  rgba(0,0,0,0.06);
-  --border-ghost:   rgba(0,0,0,0.04);
-
-  /* Primary accent: green (was sand) */
-  --accent-sand:       var(--green);
-  --accent-sand-deep:  var(--green-deep);
-  /* Education accent: green */
-  --accent-sage:       var(--green);
-  --accent-sage-deep:  var(--green-deep);
-  /* BlackBerry accent: amber */
-  --accent-slate:      var(--amber);
-  --accent-slate-deep: var(--amber-deep);
-  /* Wellframe accent: deep pine */
-  --accent-rose:       var(--green-deep);
-  --accent-rose-deep:  var(--green-deep);
-
-  /* Theme accent — swaps per theme to drive metrics, CTAs, links */
-  --accent:       var(--green);
-  --accent-deep:  var(--green-deep);
-  --accent-soft:  var(--green-light);
-  --accent-muted: var(--green-muted);
-
-  /* Typography */
-  --font-heading: 'Instrument Serif', Georgia, serif;
-  --font-mono:    'JetBrains Mono', 'Courier New', monospace;
-  --font-body:    'Geist', system-ui, sans-serif;
-
-  /* Spacing (4px scale) */
-  --sp-1: 4px;   --sp-2: 8px;   --sp-3: 12px;  --sp-4: 16px;
-  --sp-5: 20px;  --sp-6: 24px;  --sp-7: 28px;  --sp-8: 32px;
-  --sp-10: 40px; --sp-12: 48px; --sp-16: 64px; --sp-20: 80px;
-
-  /* Layout */
-  --max-width: 720px;
-  --content-padding: var(--sp-8);
-
-  /* Radii */
-  --radius:    6px;
-  --radius-lg: 12px;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-sans:  'Geist', system-ui, sans-serif;
+  --font-mono:  'JetBrains Mono', ui-monospace, monospace;
 }
 
-/* --- Base Styles --- */
+*, *::before, *::after { box-sizing: border-box; }
 
-html {
-  scroll-behavior: smooth;
-}
+html { background: var(--paper); }
 
-html, body {
-  height: 100%;
-  background: var(--bg-base);
-  color: var(--text-1);
-  font-family: var(--font-body);
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
   font-size: 16px;
+  line-height: 1.65;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  color: inherit;
+a { color: var(--ink); }
+a:hover { color: var(--accent); }
+
+button { font: inherit; color: inherit; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
 }
 
-ul, ol {
-  list-style: none;
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-a {
-  color: inherit;
+/* Section label */
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+
+/* Mono utility text */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.num { font-family: var(--font-mono); font-size: 11px; color: var(--accent); }
+
+/* Page title */
+.page-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 44px;
+  line-height: 1;
+  margin: clamp(56px, 9vw, 104px) 0 0;
+}
+.page-title .dot { color: var(--accent); }
+
+/* Footer shared by all pages */
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px 24px;
+  margin-top: 72px;
+  padding-top: 24px;
+  border-top: 1px solid var(--hairline);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+.site-footer a { color: var(--muted); }
+.site-footer a:hover { color: var(--accent); }
+.site-footer .footer-link { text-decoration: none; padding: 12px 0; }
+
+/* Post list rows (home + writing index) */
+.post-row {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
   text-decoration: none;
 }
-
-img {
-  max-width: 100%;
-  height: auto;
+.post-row .post-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  line-height: 1.3;
+}
+.post-row .post-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
 }
 
-/* --- Typography --- */
-
-h1, h2, h3, h4 {
-  font-family: var(--font-heading);
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-  color: var(--text-1);
-  font-weight: 400;
-}
-
-h1 {
-  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-  line-height: 1.15;
-}
-
-h2 {
-  font-size: clamp(1.1rem, 2vw, 1.6rem);
-}
-
-h3 {
-  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
-  font-family: var(--font-body);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-p {
-  font-size: 0.88rem;
-  line-height: 1.75;
-  color: var(--text-2);
-}
-
-/* --- Scrollbar --- */
-
-::-webkit-scrollbar       { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.28); }
-
-* {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0,0,0,0.15) transparent;
-}
-
-/* --- Theme overrides ---
-   Only --bg-base and --bg-raised change per theme.
-   All accent colors, text, and typography stay identical.
-   -------------------------------------------------------- */
-
-[data-theme="sage"] {
-  --bg-base:    #C2D9CC;
-  --bg-raised:  #EAF3EE;
-  --bg-hover:   rgba(37, 82, 64, 0.12);
-
-  --border-strong:  rgba(37, 82, 64, 0.18);
-  --border-medium:  rgba(37, 82, 64, 0.13);
-  --border-subtle:  rgba(37, 82, 64, 0.09);
-  --border-ghost:   rgba(37, 82, 64, 0.05);
-
-  --accent:       var(--green-deep);
-  --accent-deep:  #173529;
-  --accent-soft:  rgba(37, 82, 64, 0.12);
-  --accent-muted: rgba(37, 82, 64, 0.25);
-
-  /* Secondary text — green-tinted grays so they don't read as muddy on sage bg */
-  --text-2: #1E3B30;
-  --text-3: #3D5147;
-  --text-4: #6B7E72;
-  --text-5: #4F6157;
-  --text-6: #8FA095;
-}
-
-[data-theme="warm"] {
-  --bg-base:    #FDF3E3;
-  --bg-raised:  #FFFFFF;
-  --bg-hover:   rgba(200, 130, 42, 0.08);
-
-  --border-strong:  rgba(200, 130, 42, 0.2);
-  --border-medium:  rgba(200, 130, 42, 0.13);
-  --border-subtle:  rgba(200, 130, 42, 0.09);
-  --border-ghost:   rgba(200, 130, 42, 0.04);
-
-  --accent:       var(--amber);
-  --accent-deep:  var(--amber-deep);
-  --accent-soft:  var(--amber-light);
-  --accent-muted: rgba(200, 130, 42, 0.3);
-
-  /* Secondary text — amber-tinted grays so they harmonize with the cream bg */
-  --text-2: #3A2E1D;
-  --text-3: #6E5636;
-  --text-4: #A89880;
-  --text-5: #806845;
-  --text-6: #C2B49E;
-}
-
-/* Smooth background transition when switching themes */
-html {
-  transition: background-color 0.3s ease;
-}
-
-/* --- Stat counters --- */
-
-[data-counter] {
-  font-weight: 600;
-  color: var(--role-accent, var(--accent));
-  font-variant-numeric: tabular-nums;
-  display: inline-block;
-}
-
-/* --- Layout Utility --- */
-
-.section {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: var(--sp-10) var(--content-padding);
-  position: relative;
-}
-
-.section + .section {
-  border-top: 1px solid var(--border-subtle);
-}
-
-/* --- Responsive --- */
-
-@media (max-width: 768px) {
-  :root {
-    --content-padding: var(--sp-5);
-  }
-
-  .section {
-    padding: var(--sp-8) var(--content-padding);
-  }
-}
-
-@media (max-width: 480px) {
-  :root {
-    --content-padding: var(--sp-4);
-  }
-}
+.arrow-link { display: inline-block; padding: 8px 0; color: var(--accent); }

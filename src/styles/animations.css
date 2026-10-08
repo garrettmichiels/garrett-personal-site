@@ -1,8 +1,0 @@
-/* ============================================
-   Animations — Single gesture, done consistently
-   ============================================ */
-
-/* Transition defaults */
-.transition-standard { transition: all 0.2s ease; }
-.transition-nav      { transition: all 0.25s ease; }
-

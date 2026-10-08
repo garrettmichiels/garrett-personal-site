@@ -1,0 +1,36 @@
+---
+interface Props { current?: 'writing' | 'more' }
+const { current } = Astro.props;
+---
+<header class="site-header">
+  <a href="/" class="brand">Garrett Michiels<span>.</span></a>
+  <nav aria-label="Main">
+    <a href="/writing" class:list={[{ current: current === 'writing' }]} aria-current={current === 'writing' ? 'page' : undefined}>Writing</a>
+    <a href="/more" class:list={[{ current: current === 'more' }]} aria-current={current === 'more' ? 'page' : undefined}>More</a>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    text-decoration: none;
+    padding: 10px 0;
+  }
+  .brand span { color: var(--accent); }
+  nav {
+    display: flex;
+    gap: 20px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  nav a { text-decoration: none; padding: 12px 0; }
+  nav a.current { color: var(--accent); }
+</style>
