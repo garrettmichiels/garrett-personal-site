@@ -69,9 +69,10 @@ more:
   title: A little more
 
   bio:
-    - I grew up in NJ, went to school in Boston, and stayed since.
-    - I started my career with my first two co-ops where I took on a DevOps and Software Developer role. I was fortunate enough to learn from some great people and make a difference on my co-ops, thus earning me the Khoury Co-Op Award.
+    - I grew up in NJ, went to school in Boston, and stayed ever since.
+    - I started my career with my first two co-ops where I took on a DevOps and Software Developer role. I was fortunate enough to learn from some great people and build impactful systems while at my co-ops, thus earning me the Khoury Co-Op Award.
     - Outside of work, I'm usually on a golf course, tinkering with an idea, or hanging with friends and family. Right now I am curious about how to balance life and work, and where AI (healthily) fits into all of it.
+    # - 
 
   # Shown in this order. icon can be: golf, book, screen, code, headphones
   # (the golf one opens the putting game)
@@ -86,7 +87,7 @@ more:
 
     - name: Well-made websites
       icon: screen
-      text: "I collect them. A few favorites: [paco.me](https://paco.me), [brianlovin.com](https://brianlovin.com/), and [nelson.co](https://nelson.co/)."
+      text: "I collect them. I love well crafted sites that express personality and intuition. A few favorites: [paco.me](https://paco.me), [brianlovin.com](https://brianlovin.com/), and [nelson.co](https://nelson.co/). I also love to read tech blogs and about the newest in AI from the front lines."
 
     # - name: Side projects
     #   icon: code
@@ -94,7 +95,7 @@ more:
 
     - name: Music
       icon: headphones
-      text: I've been listening to a lot of Malcom Todd lately.
+      text: I've been listening to a lot of Malcom Todd lately. I don't have one particular genre I like but I do especially love classic rock.
 
   elsewhere: Find me on [LinkedIn](https://www.linkedin.com/in/garrett-michiels/), or just [say hello](mailto:michielsgarrett@gmail.com).
 

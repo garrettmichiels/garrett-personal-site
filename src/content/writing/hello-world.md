@@ -6,7 +6,7 @@ tags: [meta]
 draft: true
 ---
 
-This is a placeholder post. Set `draft: true` to publish it, or delete the file.
+This is a placeholder post. Set `draft: false` to publish it, or delete the file.
 
 ## A heading
 
