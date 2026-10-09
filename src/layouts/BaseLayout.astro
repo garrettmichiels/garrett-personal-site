@@ -1,12 +1,16 @@
 ---
+import { site } from '../data/site';
+
 interface Props {
   title?: string;
   description?: string;
+  type?: 'website' | 'article';
 }
 
 const {
-  title = 'Garrett Michiels — Software Engineer',
-  description = 'Software Engineer at Wayfair. Building high-impact systems at scale.',
+  title = `${site.name} — Software Engineer`,
+  description = site.description ?? '',
+  type = 'website',
 } = Astro.props;
 ---
 
@@ -16,100 +20,32 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="alternate" type="application/rss+xml" title="Garrett Michiels — Writing" href="/rss.xml" />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL('/og.png', Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤓</text></svg>" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
 
     <title>{title}</title>
-
-    <!-- Restore theme before first paint -->
-    <script is:inline>
-      (function () {
-        var t = localStorage.getItem('gm-theme');
-        if (t && t !== 'paper') document.documentElement.setAttribute('data-theme', t);
-      })();
-    </script>
   </head>
   <body>
+    <a href="#main" class="skip-link">Skip to content</a>
     <slot />
-
-    <!-- Stat counter animations -->
-    <script>
-      function animateCounter(el: HTMLElement) {
-        const target   = parseInt(el.dataset.counter ?? '0', 10);
-        const suffix   = el.dataset.suffix ?? '';
-        const prefix   = el.dataset.prefix ?? '';
-        const duration = 1800;
-        const start    = performance.now();
-
-        const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
-
-        function tick(now: number) {
-          const progress = Math.min((now - start) / duration, 1);
-          el.textContent = prefix + Math.round(easeOut(progress) * target) + suffix;
-          if (progress < 1) requestAnimationFrame(tick);
-        }
-
-        requestAnimationFrame(tick);
-      }
-
-      const counterObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            animateCounter(entry.target as HTMLElement);
-            counterObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.6 });
-
-      document.querySelectorAll<HTMLElement>('[data-counter]').forEach((el) => {
-        counterObserver.observe(el);
-      });
-    </script>
-
-    <!-- Motion.dev scroll + entrance animations -->
-    <script>
-      import { animate, inView, stagger } from 'motion';
-
-      function reveal(els: HTMLElement[], opts: { y?: number; duration?: number; delay?: number | ((i: number) => number) }) {
-        els.forEach(el => { el.style.opacity = '0'; });
-        animate(els, { opacity: [0, 1], y: [opts.y ?? 10, 0] }, {
-          duration: opts.duration ?? 0.5,
-          delay: opts.delay ?? 0,
-          easing: [0.25, 0.46, 0.45, 0.94],
-        }).then(() => {
-          els.forEach(el => { el.style.opacity = '1'; el.style.transform = ''; });
-        });
-      }
-
-      // Hero entrance — stagger all elements in
-      const heroEls = [
-        document.querySelector<HTMLElement>('.hero-image-wrap'),
-        document.querySelector<HTMLElement>('.hero-content .section-label-wrap'),
-        document.querySelector<HTMLElement>('.hero-content h1'),
-        document.querySelector<HTMLElement>('.hero-content .hero-bio'),
-        document.querySelector<HTMLElement>('.hero-content .hero-ctas'),
-      ].filter((el): el is HTMLElement => el !== null);
-
-      if (heroEls.length) reveal(heroEls, { delay: stagger(0.1) });
-
-      // Role cards — stagger in when the Experience section enters view
-      inView('.roles', () => {
-        const items = [...document.querySelectorAll<HTMLElement>('.stagger-item')];
-        if (items.length) reveal(items, { y: 12, duration: 0.4, delay: stagger(0.15) });
-      }, { amount: 0.1 });
-    </script>
-
   </body>
 </html>
 
 <style is:global>
   @import '../styles/global.css';
-  @import '../styles/animations.css';
 </style>

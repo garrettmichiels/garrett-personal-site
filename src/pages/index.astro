@@ -1,31 +1,314 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Sidebar from '../components/Sidebar.astro';
-import Hero from '../components/Hero.astro';
-import Experience from '../components/Experience.astro';
-import Education from '../components/Education.astro';
-import Footer from '../components/Footer.astro';
-import ThemeSwitcher from '../components/ThemeSwitcher.astro';
+import Flag from '../components/Flag.astro';
+import { getPosts, formatDate } from '../lib/posts';
+import { site, inline } from '../data/site';
+
+const home = site.home ?? {};
+const roles = home.roles?.length ? home.roles : [];
+const latest = home.writing ? (await getPosts()).slice(0, 3) : [];
 ---
 
 <BaseLayout>
-  <Sidebar />
-  <main>
-    <div id="home"><Hero /></div>
-    <div id="experience"><Experience /></div>
-    <div id="education"><Education /></div>
+  <main id="main" class="page home">
+    <header>
+      <div class="name-wrap" id="name-wrap">
+        <h1>{site.name}<button type="button" id="dot" aria-label="Roll the ball">.</button></h1>
+        <span class="hole" id="hole" aria-hidden="true" hidden>
+          <span class="hole-cup"></span>
+          <span class="hole-pole"></span>
+          <span class="hole-flag"></span>
+        </span>
+        <span class="ball" id="ball" aria-hidden="true" hidden></span>
+      </div>
+      {roles.length > 0 && (
+        <>
+          <p class="sr-only">{roles.map((r) => r.replace(/\.$/, '')).join(', ')}.</p>
+          <div class="role role-static" aria-hidden="true">{roles[roles.length - 1]}</div>
+          <div class="role role-anim" id="role" aria-hidden="true" data-roles={JSON.stringify(roles)}>{roles[0]}</div>
+        </>
+      )}
+      {home.tagline && <div class="mono tagline" set:html={inline(home.tagline)} />}
+    </header>
+
+    {!!home.intro?.length && (
+      <section class="block intro">
+        {home.intro.map((p) => <p set:html={inline(p)} />)}
+      </section>
+    )}
+
+    {latest.length > 0 && (
+      <section class="block writing">
+        <h2 class="label">Writing</h2>
+        {latest.map((post) => (
+          <a href={`/writing/${post.id}/`} class="post-row home-row">
+            <span class="num">№ {post.num}</span>
+            <span class="post-title grow">{post.data.title}</span>
+            <span class="post-date">{formatDate(post.data.date)}</span>
+          </a>
+        ))}
+        <a href="/writing" class="arrow-link">All writing ↗</a>
+      </section>
+    )}
+
+    {!!home.experience?.length && (
+      <section class="block">
+        <h2 class="label">Experience</h2>
+        {home.experience.map((e) => (
+          <div class="exp">
+            <span>{e.org} <span class="muted">· {e.role}</span></span>
+            <span class="mono nowrap">{e.years}</span>
+          </div>
+        ))}
+        {home.resume && <a href={home.resume} class="arrow-link">Full resume ↗</a>}
+      </section>
+    )}
+
+    {home.more && (
+      <section class="block more-block">
+        <h2 class="label">More</h2>
+        <p set:html={inline(home.more)} />
+      </section>
+    )}
+
+    {home.connect && (
+      <section class="block">
+        <h2 class="label">Connect</h2>
+        <p set:html={inline(home.connect)} />
+      </section>
+    )}
+
+    <footer class="site-footer">
+      {home.currently && <span>Currently: {home.currently}</span>}
+      <span id="clock"></span>
+    </footer>
+
+    {home.long_drive && <p class="drive" id="drive"><Flag />{home.long_drive}</p>}
   </main>
-  <Footer />
-  <ThemeSwitcher />
 </BaseLayout>
 
 <style>
-  main {
-    scroll-behavior: smooth;
+  .home { padding-top: clamp(40px, 7vw, 88px); }
+
+  .name-wrap { position: relative; display: inline-block; }
+  h1 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  #dot {
+    background: none;
+    border: 0;
+    padding: 0 4px 0 0;
+    margin: 0;
+    min-height: 44px;
+    font: inherit;
+    line-height: 1;
+    color: var(--accent);
+    cursor: pointer;
+    vertical-align: baseline;
+    transition: color 0.12s ease;
   }
 
-  /* Offset anchors for smooth scroll so they don't hide behind viewport top */
-  [id] {
-    scroll-margin-top: var(--sp-4);
+  .hole {
+    position: absolute;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .hole[hidden], .ball[hidden] { display: none; }
+  .hole-cup { position: absolute; left: -8px; top: -3px; width: 16px; height: 6px; border-radius: 50%; background: var(--ink); }
+  .hole-pole { position: absolute; left: -0.75px; top: -32px; width: 1.5px; height: 32px; background: var(--ink); }
+  .hole-flag { position: absolute; left: 0.75px; top: -32px; width: 0; height: 0; border-left: 14px solid var(--accent); border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+  .ball {
+    position: absolute;
+    width: 10px; height: 10px;
+    margin: -5px 0 0 -5px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--ink);
+    pointer-events: none;
+  }
+
+  .role {
+    font-family: var(--font-serif);
+    font-size: 28px;
+    line-height: 1.2;
+    margin-top: 8px;
+    color: var(--accent);
+    font-style: italic;
+    transition: opacity 0.45s ease;
+  }
+  .role-static { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .role-static { display: block; }
+    .role-anim { display: none; }
+  }
+  .tagline { margin-top: 14px; }
+  .tagline :global(a) { color: var(--muted); }
+  .tagline :global(a:hover) { color: var(--accent); }
+
+  .block { margin-top: 48px; }
+  .block p { margin: 0; }
+  .block.intro p { margin: 0 0 16px; }
+  .block.intro p:last-child { margin: 0; }
+  .writing { margin-top: 56px; }
+
+  .home-row { padding: 8px 0; }
+  .grow { flex: 1; }
+  .muted { color: var(--muted); }
+  .exp { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding: 6px 0; }
+  .nowrap { white-space: nowrap; }
+  .more-block :global(a) { color: var(--accent); transition: color 0.15s; }
+  .more-block :global(a:hover) { color: var(--accent-dark); }
+
+  /* Empty space below the footer; the line fades in if you keep scrolling past it. */
+  .drive {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    height: 72px;
+    margin: 8px 0 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--muted);
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+  .drive.shown { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    .drive { opacity: 1; transition: none; }
   }
 </style>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Rotating word
+  const roleEl = document.getElementById('role');
+  if (roleEl && !reduce && JSON.parse(roleEl.dataset.roles ?? "[]").length > 1) {
+    const roles: string[] = JSON.parse(roleEl.dataset.roles ?? '[]');
+    let i = 0;
+    setInterval(() => {
+      roleEl.style.opacity = '0';
+      setTimeout(() => {
+        i = (i + 1) % roles.length;
+        roleEl.textContent = roles[i];
+        roleEl.style.opacity = '1';
+      }, 450);
+    }, 3700);
+  }
+
+  // Live clock (client-side so the build time isn't baked in)
+  const clockEl = document.getElementById('clock');
+  if (clockEl) {
+    const tick = () => {
+      const t = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' });
+      clockEl.textContent = `${t} ET`;
+    };
+    tick();
+    setInterval(tick, 20000);
+  }
+
+  // Rolling-ball easter egg
+  const wrap = document.getElementById('name-wrap');
+  const dot = document.getElementById('dot');
+  const hole = document.getElementById('hole');
+  const ball = document.getElementById('ball');
+  let rolling = false;
+
+  if (wrap && dot && hole && ball && !reduce) {
+    const later = (fn: () => void, ms: number) => setTimeout(fn, ms);
+    dot.addEventListener('click', () => {
+      if (rolling) return;
+      rolling = true;
+      const w = wrap.getBoundingClientRect();
+      const d = dot.getBoundingClientRect();
+      const sx = d.left - w.left + (d.width - 4) / 2;
+      const base = d.bottom - w.top - d.height * 0.22;
+      const hx = w.width + 64;
+      const hy = base + 1;
+      const sy = base - 5;
+
+      hole.hidden = false;
+      hole.style.left = `${hx}px`;
+      hole.style.top = `${hy}px`;
+      hole.style.opacity = '0';
+      hole.style.transform = 'translateY(8px)';
+
+      later(() => { hole.style.opacity = '1'; hole.style.transform = 'translateY(0)'; }, 40);
+      // The ball fades in where the dot was as the dot fades out
+      dot.style.color = 'transparent';
+      ball.hidden = false;
+      ball.style.transition = 'none';
+      ball.style.left = `${sx}px`;
+      ball.style.top = `${sy}px`;
+      ball.style.transform = 'scale(1)';
+      ball.style.opacity = '0';
+      later(() => {
+        ball.style.transition = 'opacity 0.2s ease';
+        ball.style.opacity = '1';
+      }, 20);
+      later(() => {
+        ball.style.transition = 'opacity 0.2s ease, left 2.2s cubic-bezier(0.25, 0.7, 0.35, 1)';
+        ball.style.left = `${hx}px`;
+      }, 150);
+      later(() => {
+        ball.style.transition = 'top 0.22s ease-in, transform 0.22s ease-in';
+        ball.style.top = `${hy}px`;
+        ball.style.transform = 'scale(0.15)';
+      }, 2380);
+      later(() => { ball.hidden = true; }, 2630);
+      later(() => { hole.style.opacity = '0'; hole.style.transform = 'translateY(8px)'; }, 3380);
+      later(() => {
+        hole.hidden = true;
+        dot.style.color = '';
+        rolling = false;
+      }, 3780);
+    });
+  }
+
+  // "Long drive" line: once you're at the bottom, keep scrolling and it fades in.
+  const drive = document.getElementById('drive');
+  if (drive && !reduce) {
+    const GIVE = 240; // extra scrolling needed at the bottom
+    let pull = 0;
+    let shown = false;
+    let lastWheel = 0;
+    let armed = false;
+
+    const atBottom = () =>
+      window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1;
+
+    const tug = (amount: number) => {
+      pull += amount;
+      if (pull >= GIVE) {
+        shown = true;
+        drive.classList.add('shown');
+      }
+    };
+
+    window.addEventListener('wheel', (e) => {
+      const now = performance.now();
+      // Only a gesture that starts at the bottom counts, so the momentum of
+      // the scroll that carried you here doesn't trigger it on its own.
+      if (now - lastWheel > 200) armed = atBottom();
+      lastWheel = now;
+      if (!shown && armed && e.deltaY > 0) tug(e.deltaY);
+    }, { passive: true });
+
+    let touchY = 0;
+    window.addEventListener('touchstart', (e) => { touchY = e.touches[0].clientY; }, { passive: true });
+    window.addEventListener('touchmove', (e) => {
+      const y = e.touches[0].clientY;
+      if (!shown && atBottom()) tug(touchY - y);
+      touchY = y;
+    }, { passive: true });
+  }
+</script>

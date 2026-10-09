@@ -1,0 +1,87 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import { getPosts, formatDate } from '../../lib/posts';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, description, date, tags } = post.data;
+const meta = [formatDate(date), tags[0], `${post.minutes} min read`].filter(Boolean);
+---
+
+<BaseLayout title={`${title} — ${site.name}`} description={description} type="article">
+  <main id="main" class="page">
+    <SiteHeader current="writing" />
+
+    <article>
+      <div class="meta mono"><span class="num">№ {post.num}</span>{meta.map((m) => <> · {m}</>)}</div>
+      <h1>{title}</h1>
+      <p class="summary">{description}</p>
+      <div class="rule"></div>
+      <div class="prose"><Content /></div>
+    </article>
+
+    <footer class="site-footer">
+      <a href="/writing" class="footer-link">← All writing</a>
+      {post.next && (
+        <a href={`/writing/${post.next.id}/`} class="footer-link next">Next: <span class="num">№ {post.next.num}</span> {post.next.data.title} →</a>
+      )}
+    </footer>
+  </main>
+</BaseLayout>
+
+<style>
+  article { margin-top: clamp(56px, 9vw, 104px); }
+  h1 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(40px, 6vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 16px 0 0;
+  }
+  .summary { font-size: 19px; line-height: 1.55; color: var(--body-2); margin: 20px 0 0; }
+  .rule { height: 1px; background: var(--hairline); margin: 48px 0; }
+  .next { color: var(--ink); }
+
+  .prose :global(p) { font-size: 18px; line-height: 1.75; margin: 0 0 24px; }
+  .prose :global(h2) { font-family: var(--font-serif); font-weight: 400; font-size: 30px; line-height: 1.2; margin: 48px 0 12px; }
+  .prose :global(h3) { font-family: var(--font-serif); font-weight: 400; font-size: 24px; line-height: 1.25; margin: 36px 0 10px; }
+  .prose :global(a) { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--hairline); }
+  .prose :global(a:hover) { text-decoration-color: currentColor; }
+  .prose :global(ul), .prose :global(ol) { font-size: 18px; line-height: 1.75; margin: 0 0 24px; padding-left: 24px; }
+  .prose :global(ul) { list-style: disc; }
+  .prose :global(ol) { list-style: decimal; }
+  .prose :global(blockquote) {
+    margin: 40px 0;
+    padding: 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 26px;
+    line-height: 1.35;
+    color: var(--accent);
+  }
+  .prose :global(blockquote p) { font-size: inherit; line-height: inherit; margin: 0; }
+  .prose :global(code) { font-family: var(--font-mono); font-size: 0.85em; background: rgba(24,32,27,0.06); padding: 1px 5px; border-radius: 4px; }
+  .prose :global(pre) {
+    background-color: var(--ink) !important;
+    color: #E6ECE7;
+    border-radius: 10px;
+    padding: 20px 24px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.7;
+    margin: 0 0 24px;
+  }
+  .prose :global(pre code) { background: none; padding: 0; font-size: inherit; }
+  .prose :global(img) { max-width: 100%; height: auto; border-radius: 6px; margin: 8px 0 24px; }
+  .prose :global(hr) { border: 0; border-top: 1px solid var(--hairline); margin: 48px 0; }
+</style>

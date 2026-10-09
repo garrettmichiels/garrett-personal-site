@@ -12,9 +12,9 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.1",
-    "@web-kits/audio": "0.1.0",
     "astro": "^6.0.8",
-    "motion": "^12.40.0"
+    "yaml": "^2.9.1"
   }
 }

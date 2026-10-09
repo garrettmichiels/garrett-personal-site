@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { site, inline } from '../data/site';
+
+const title = site.not_found?.title ?? 'Out of bounds';
+const text = site.not_found?.text;
+---
+
+<BaseLayout title={`${title} — ${site.name}`} description="That page doesn't exist.">
+  <main id="main" class="page">
+    <SiteHeader />
+
+    <h1 class="page-title">{title}<span class="dot">.</span></h1>
+    {text && <p class="msg" set:html={inline(text)} />}
+
+    <img class="forest" src="/forest.webp" alt="A misty stand of pine trees" width="1369" height="620" />
+
+    <a href="/" class="back">← Back home</a>
+  </main>
+</BaseLayout>
+
+<style>
+  .msg { color: var(--body-2); margin: 16px 0 0; }
+  .forest {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 48px 0 24px;
+    -webkit-mask-image: radial-gradient(ellipse 62% 62% at 50% 40%, #000 62%, transparent 100%);
+    mask-image: radial-gradient(ellipse 62% 62% at 50% 40%, #000 62%, transparent 100%);
+  }
+  .back { color: var(--muted); text-decoration: none; display: inline-block; padding: 12px 0; }
+  .back:hover { color: var(--accent); }
+</style>

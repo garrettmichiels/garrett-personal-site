@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import { getPosts, formatDate } from '../../lib/posts';
+import { site, inline } from '../../data/site';
+
+const posts = await getPosts();
+const tags = [...new Set(posts.flatMap((p) => p.data.tags))];
+const title = site.writing?.title ?? 'Writing';
+const intro = site.writing?.intro;
+---
+
+<BaseLayout title={`${title} — ${site.name}`} description={intro ?? site.description}>
+  <main id="main" class="page">
+    <SiteHeader current="writing" />
+
+    <h1 class="page-title">{title}<span class="dot">.</span></h1>
+    {intro && <p class="dek" set:html={inline(intro)} />}
+
+    {tags.length > 0 && (
+      <div class="filters" id="filters">
+        <button type="button" data-tag="" aria-pressed="true">All</button>
+        {tags.map((t) => <button type="button" data-tag={t} aria-pressed="false">{t}</button>)}
+      </div>
+    )}
+
+    <section class="list" id="list">
+      {posts.length === 0 && <p class="empty">Nothing here yet.</p>}
+      {posts.map((post) => (
+        <a href={`/writing/${post.id}/`} class="post-row item" data-tags={post.data.tags.join('|')}>
+          <span class="num">№ {post.num}</span>
+          <span class="body">
+            <span class="post-title">{post.data.title}</span>
+            <span class="summary">{post.data.description}</span>
+          </span>
+          <span class="post-date">{formatDate(post.data.date)}</span>
+        </a>
+      ))}
+    </section>
+
+    <footer class="site-footer">
+      <span>New posts by <a href="/rss.xml">RSS</a></span>
+      <a href="/" class="footer-link">← Home</a>
+    </footer>
+  </main>
+</BaseLayout>
+
+<style>
+  .dek { color: var(--body-2); margin: 16px 0 0; }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    margin-top: 32px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .filters button {
+    background: none;
+    border: 0;
+    padding: 10px 0;
+    cursor: pointer;
+    color: var(--muted);
+  }
+  .filters button[aria-pressed='true'] { color: var(--ink); text-decoration: underline; }
+  .filters button:hover { color: var(--accent); }
+
+  .list { margin-top: 24px; border-bottom: 1px solid var(--hairline-soft); }
+  .list:has(.empty) { border-bottom: 0; }
+  .empty { color: var(--muted); }
+  .item { padding: 14px 0; border-top: 1px solid var(--hairline-soft); }
+  .item[hidden] { display: none; }
+  .body { flex: 1; min-width: 0; }
+  .body .post-title, .body .summary { display: block; }
+  .summary { font-size: 15px; color: var(--muted); margin-top: 2px; }
+</style>
+
+<script>
+  const filters = document.getElementById('filters');
+  const items = document.querySelectorAll<HTMLElement>('#list [data-tags]');
+  filters?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-tag]');
+    if (!btn) return;
+    const tag = btn.dataset.tag ?? '';
+    filters.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    items.forEach((el) => {
+      el.hidden = tag !== '' && !(el.dataset.tags ?? '').split('|').includes(tag);
+    });
+  });
+</script>
